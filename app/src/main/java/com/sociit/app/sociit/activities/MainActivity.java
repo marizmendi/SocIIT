@@ -31,13 +31,14 @@ public class MainActivity extends AppCompatActivity
         NewsFragment.OnFragmentInteractionListener,
         HomeFragment.OnFragmentInteractionListener {
 
+    SqlHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SqlHelper db = new SqlHelper(getApplicationContext());
+        db = new SqlHelper(getApplicationContext());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

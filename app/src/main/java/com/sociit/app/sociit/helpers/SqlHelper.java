@@ -4,6 +4,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.sociit.app.sociit.entities.*;
+
+import java.util.List;
+
 
 /**
  * Created by Manuel on 19/04/2016.
@@ -30,7 +34,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     // ACTIVITIES Table - column names
     private static final String KEY_ACTIVITY_NAME = "name";
     private static final String KEY_ACTIVITY_BUILDING = "building";
-    private static final String KEY_ACTIVITY_USER= "user";
+    private static final String KEY_ACTIVITY_USER = "user";
 
     // BUILDINGS Table - column names
     private static final String KEY_BUILDING_NAME = "name";
@@ -113,4 +117,63 @@ public class SqlHelper extends SQLiteOpenHelper {
         // create new tables
         onCreate(db);
     }
+
+    // TODO: Editar las siguientes funciones para que hagan peticiones a la base de datos.
+
+    public boolean addUser(User user) {
+        return false;
+    }
+
+    public User getUserByUsername(String username) {
+        return null;
+    }
+
+    public boolean editUser(User user) {
+        return false;
+    }
+
+    public boolean deleteUser(User user) {
+        return false;
+    }
+
+    public boolean addActivity(Activity activity) {
+        return false;
+    }
+
+    public Activity getActivityById(int id) {
+        return null;
+    }
+
+    public List<Activity> getAllActivities() {
+        return null;
+    }
+
+    public List<Activity> getUserActivities(User user) {
+        return null;
+    }
+
+    public List<Activity> getBuildingActivities(Building building) {
+        return null;
+    }
+
+    public boolean editActivity(Activity activity) {
+        return false;
+    }
+
+    public boolean deleteActivity(Activity activity) {
+        return false;
+    }
+
+    public List<Building> getAllBuildings() {
+        return null;
+    }
+
+    public boolean addComment(Comment comment) {
+        return false;
+    }
+
+    public List<Comment> getActivityComments(Activity activity) {
+        return null;
+    }
+
 }

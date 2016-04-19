@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -30,6 +31,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.sociit.app.sociit.R;
+import com.sociit.app.sociit.entities.User;
 import com.sociit.app.sociit.helpers.SqlHelper;
 
 import java.util.ArrayList;
@@ -71,6 +73,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        db = new SqlHelper(getApplicationContext());
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -182,9 +186,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             focusView = mEmailView;
             cancel = true;
         }
-
-        //TODO
-        cancel = false;
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -317,12 +318,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            /*try {
+            try {
                 // Simulate network access.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 return false;
             }
+
+            /*
+            User user = db.getUserByUsername(mEmail);
+            return mPassword == user.getPassword();
+            */
 
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
@@ -330,7 +336,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     // Account exists, return true if the password matches.
                     return pieces[1].equals(mPassword);
                 }
-            }*/
+            }
 
             // TODO: register the new account here.
             return true;
