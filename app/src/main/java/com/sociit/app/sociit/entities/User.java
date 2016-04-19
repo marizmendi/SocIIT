@@ -1,22 +1,22 @@
-package com.sociit.app.sociit;
-
-import android.location.Address;
+package com.sociit.app.sociit.entities;
 
 import java.util.List;
 
 /**
  * Created by Manuel on 19/04/2016.
  */
-public class Building {
+public class User {
     int id;
     String name;
-    Address address;
+    String username;
+    String password;
     List<Activity> activityList;
 
-    public Building(int id, Address address, String name, List<Activity> activityList) {
+    public User(int id, String username, String name, String password, List<Activity> activityList) {
         this.id = id;
-        this.address = address;
+        this.username = username;
         this.name = name;
+        this.password = password;
         this.activityList = activityList;
     }
 
@@ -28,6 +28,14 @@ public class Building {
         this.id = id;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getName() {
         return name;
     }
@@ -36,12 +44,12 @@ public class Building {
         this.name = name;
     }
 
-    public Address getAddress() {
-        return address;
+    public String getPassword() {
+        return password;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public List<Activity> getActivityList() {
@@ -55,6 +63,5 @@ public class Building {
     public void addActivity(Activity activity) {
         this.activityList.add(activity);
     }
-
 
 }

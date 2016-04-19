@@ -1,4 +1,4 @@
-package com.sociit.app.sociit;
+package com.sociit.app.sociit.entities;
 
 /**
  * Created by Manuel on 19/04/2016.

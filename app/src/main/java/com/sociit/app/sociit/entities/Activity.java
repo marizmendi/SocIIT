@@ -1,4 +1,4 @@
-package com.sociit.app.sociit;
+package com.sociit.app.sociit.entities;
 
 import java.util.List;
 
@@ -8,8 +8,8 @@ import java.util.List;
 public class Activity {
     int id;
     String name;
-    List<User> userList;
     Building building;
+    List<User> userList;
     List<Comment> commentList;
 
     public Activity(int id, String name, List<User> userList, Building building, List<Comment> commentList) {
@@ -36,6 +36,14 @@ public class Activity {
         this.name = name;
     }
 
+    public Building getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(Building building) {
+        this.building = building;
+    }
+
     public List<User> getUserList() {
         return userList;
     }
@@ -46,14 +54,6 @@ public class Activity {
 
     public void addUser(User user) {
         this.userList.add(user);
-    }
-
-    public Building getBuilding() {
-        return building;
-    }
-
-    public void setBuilding(Building building) {
-        this.building = building;
     }
 
     public List<Comment> getCommentList() {

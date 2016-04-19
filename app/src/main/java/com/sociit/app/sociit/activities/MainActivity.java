@@ -1,4 +1,4 @@
-package com.sociit.app.sociit;
+package com.sociit.app.sociit.activities;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -17,7 +17,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.sociit.app.sociit.R;
 import com.sociit.app.sociit.fragments.*;
+import com.sociit.app.sociit.helpers.SqlHelper;
 
 public class MainActivity extends AppCompatActivity
         implements
@@ -29,10 +31,13 @@ public class MainActivity extends AppCompatActivity
         NewsFragment.OnFragmentInteractionListener,
         HomeFragment.OnFragmentInteractionListener {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
