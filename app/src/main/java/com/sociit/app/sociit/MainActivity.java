@@ -1,21 +1,33 @@
 package com.sociit.app.sociit;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.sociit.app.sociit.fragments.*;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements
+        NavigationView.OnNavigationItemSelectedListener,
+        AboutFragment.OnFragmentInteractionListener,
+        ActivitiesFragment.OnFragmentInteractionListener,
+        BuildingsFragment.OnFragmentInteractionListener,
+        MyActivitiesFragment.OnFragmentInteractionListener,
+        NewsFragment.OnFragmentInteractionListener,
+        HomeFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +40,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                //        .setAction("Action", null).show();
             }
         });
 
@@ -69,6 +81,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            //Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            //startActivity(intent);
             return true;
         } else if (id == R.id.action_sign_out) {
             // Redirect to MainActivity
@@ -85,24 +99,60 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        displayView(item.getItemId());
+        return true;
+    }
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+    public void displayView(int viewId) {
 
-        } else if (id == R.id.nav_slideshow) {
+        Fragment fragment = null;
+        String title = getString(R.string.app_name);
 
-        } else if (id == R.id.nav_manage) {
+        switch (viewId) {
+            case R.id.nav_home:
+                fragment = new HomeFragment();
+                title = getResources().getString(R.string.my_activities);
+                break;
+            case R.id.nav_my_activities:
+                fragment = new MyActivitiesFragment();
+                title = getResources().getString(R.string.my_activities);
+                break;
+            case R.id.nav_buildings:
+                fragment = new BuildingsFragment();
+                title = getResources().getString(R.string.my_activities);
+                break;
+            case R.id.nav_activities:
+                fragment = new ActivitiesFragment();
+                title = getResources().getString(R.string.my_activities);
+                break;
+            case R.id.nav_news:
+                fragment = new NewsFragment();
+                title = getResources().getString(R.string.my_activities);
+                break;
+            case R.id.nav_about:
+                fragment = new AboutFragment();
+                title = getResources().getString(R.string.my_activities);
+                break;
+        }
 
-        } else if (id == R.id.nav_share) {
+        if (fragment != null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, fragment);
+            ft.commit();
+        }
 
-        } else if (id == R.id.nav_send) {
-
+        // set the toolbar title
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
+
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        Log.d("onFragmentInteraction: ", uri.toString());
     }
 }

@@ -7,6 +7,14 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">Sign in</string>
 
+    <!-- Strings related to side nav menu -->
+    <string name="home">Home</string>
+    <string name="my_activities">My Activities</string>
+    <string name="buildings">Buildings</string>
+    <string name="activities">Activities</string>
+    <string name="news">News</string>
+    <string name="about">About</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
@@ -18,4 +26,7 @@
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="action_sign_out">Sign out</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
