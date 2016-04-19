@@ -12,12 +12,15 @@ public class Activity {
     List<User> userList;
     List<Comment> commentList;
 
-    public Activity(int id, String name, List<User> userList, Building building, List<Comment> commentList) {
+    public Activity(int id, String name, Building building, List<User> userList, List<Comment> commentList) {
         this.id = id;
         this.name = name;
         this.userList = userList;
         this.building = building;
         this.commentList = commentList;
+    }
+
+    public Activity() {
     }
 
     public int getId() {

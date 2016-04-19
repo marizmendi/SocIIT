@@ -20,6 +20,10 @@ public class User {
         this.activityList = activityList;
     }
 
+    public User() {
+
+    }
+
     public int getId() {
         return id;
     }

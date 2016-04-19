@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -29,6 +30,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sociit.app.sociit.R;
 import com.sociit.app.sociit.entities.User;
@@ -66,6 +68,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private boolean newUser = false;
 
     SqlHelper db;
 
@@ -202,7 +205,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@hawk.iit.edu");
+        String[] emailSplit = email.split("@");
+        if(emailSplit.length>2){
+            return false;
+        } else if (emailSplit.length==2){
+            return emailSplit[1].equals("hawk.iit.edu");
+        } else {
+            return true;
+        }
     }
 
     private boolean isPasswordValid(String password) {
@@ -325,21 +335,27 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
 
-            /*
-            User user = db.getUserByUsername(mEmail);
-            return mPassword == user.getPassword();
-            */
+            String username = mEmail.split("@")[0];
+            User user = db.getUserByUsername(username);
+            if(user==null){
+                db.addUser(new User(0, username, username.toUpperCase(), mPassword, null));
+                newUser = true;
+                return true;
+            }
 
-            for (String credential : DUMMY_CREDENTIALS) {
+            return mPassword.equals(user.getPassword());
+
+
+/*            for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
                     // Account exists, return true if the password matches.
                     return pieces[1].equals(mPassword);
                 }
-            }
+            }*/
 
             // TODO: register the new account here.
-            return true;
+            //return true;
         }
 
         @Override
@@ -348,6 +364,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
+                if(newUser){
+                    Context context = getApplicationContext();
+                    CharSequence text = "You have been registered, welcome!";
+                    int duration = Toast.LENGTH_SHORT;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
                 // Redirect to MainActivity
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
