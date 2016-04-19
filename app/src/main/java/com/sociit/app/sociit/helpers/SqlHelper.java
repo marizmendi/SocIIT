@@ -14,7 +14,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     private static final String LOG = "SqlHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 1;
     // Database Name
     private static final String DATABASE_NAME = "SociitDB";
 
@@ -30,6 +30,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     // ACTIVITIES Table - column names
     private static final String KEY_ACTIVITY_NAME = "name";
     private static final String KEY_ACTIVITY_BUILDING = "building";
+    private static final String KEY_ACTIVITY_USER= "user";
 
     // BUILDINGS Table - column names
     private static final String KEY_BUILDING_NAME = "name";
@@ -51,16 +52,19 @@ public class SqlHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + TABLE_ACTIVITY + "(" +
                     KEY_ID + " INTEGER PRIMARY KEY," +
                     KEY_ACTIVITY_NAME + " TEXT," +
-                    KEY_ACTIVITY_BUILDING + " INTEGER"
-            + ")";
+                    KEY_ACTIVITY_BUILDING + " INTEGER, " +
+                    KEY_ACTIVITY_USER + " INTEGER, " +
+                    "FOREIGN KEY(" + KEY_ACTIVITY_BUILDING + ") REFERENCES buildings(" + KEY_ID + ")," +
+                    "FOREIGN KEY(" + KEY_ACTIVITY_USER + ") REFERENCES users(" + KEY_ID + ")" +
+                    ")";
 
     // Building table create statement
     private static final String CREATE_TABLE_BUILDING =
             "CREATE TABLE " + TABLE_BUILDING + "(" +
                     KEY_ID + " INTEGER PRIMARY KEY," +
                     KEY_BUILDING_NAME + " TEXT," +
-                    KEY_BUILDING_ADDRESS + " TEXT"
-            + ")";
+                    KEY_BUILDING_ADDRESS + " TEXT " +
+                    ")";
 
     // Comment table create statement
     private static final String CREATE_TABLE_COMMENT =
@@ -68,8 +72,10 @@ public class SqlHelper extends SQLiteOpenHelper {
                     KEY_ID + " INTEGER PRIMARY KEY," +
                     KEY_COMMENT_MESSAGE + " TEXT," +
                     KEY_COMMENT_USER + " INTEGER," +
-                    KEY_COMMENT_ACTIVITY + " INTEGER"
-            + ")";
+                    KEY_COMMENT_ACTIVITY + " INTEGER, " +
+                    "FOREIGN KEY(" + KEY_COMMENT_USER + ") REFERENCES users(" + KEY_ID + "), " +
+                    "FOREIGN KEY(" + KEY_COMMENT_ACTIVITY + ") REFERENCES activities(" + KEY_ID + ") " +
+                    ")";
 
     // User table create statement
     private static final String CREATE_TABLE_USER =
@@ -77,12 +83,13 @@ public class SqlHelper extends SQLiteOpenHelper {
                     KEY_ID + " INTEGER PRIMARY KEY," +
                     KEY_USER_NAME + " TEXT," +
                     KEY_USER_USERNAME + " TEXT," +
-                    KEY_USER_PASSWORD + " TEXT"
-            + ")";
+                    KEY_USER_PASSWORD + " TEXT " +
+                    ")";
 
 
     public SqlHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.getWritableDatabase();
     }
 
     @Override
