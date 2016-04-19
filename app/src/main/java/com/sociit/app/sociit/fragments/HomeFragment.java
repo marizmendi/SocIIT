@@ -13,6 +13,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sociit.app.sociit.R;
 
@@ -122,10 +123,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLngBounds IIT = new LatLngBounds(
+                new LatLng(41.83, -87.63), new LatLng(41.8411, -87.6235));
+
+        // Set the camera to the greatest possible zoom level that includes the
+        // bounds
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(IIT, 0));
+
+        mMap.getUiSettings().setRotateGesturesEnabled(false);
+        mMap.getUiSettings().setTiltGesturesEnabled(false);
+
     }
 
     /**
