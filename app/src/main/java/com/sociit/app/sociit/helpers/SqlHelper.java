@@ -147,7 +147,6 @@ public class SqlHelper extends SQLiteOpenHelper {
 
         User user1 = new User(0, "foo", "FOO", "hello", null);
         this.addUser(user1, db);
-
         User user2 = new User(0, "bar", "BAR", "world", null);
         this.addUser(user2, db);
 
