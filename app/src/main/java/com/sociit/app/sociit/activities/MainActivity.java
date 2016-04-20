@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         ViewCompat.animate(fab)
-                .rotation(-45)
+                .rotation(45)
                 .setDuration(500)
                 .setInterpolator(new BounceInterpolator())
                 .start();
