@@ -1,6 +1,6 @@
 package com.sociit.app.sociit.activities;
 
-import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,12 +20,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.ScaleAnimation;
+import android.widget.Toast;
 
 import com.sociit.app.sociit.R;
 import com.sociit.app.sociit.entities.Activity;
+import com.sociit.app.sociit.entities.User;
 import com.sociit.app.sociit.fragments.AboutFragment;
 import com.sociit.app.sociit.fragments.ActivityFragment;
-import com.sociit.app.sociit.fragments.AddActivityDialogFragment;
+import com.sociit.app.sociit.fragments.AddActivityFragment;
 import com.sociit.app.sociit.fragments.BuildingsFragment;
 import com.sociit.app.sociit.fragments.HomeFragment;
 import com.sociit.app.sociit.fragments.MyActivitiesFragment;
@@ -39,17 +45,17 @@ public class MainActivity extends AppCompatActivity
         BuildingsFragment.OnFragmentInteractionListener,
         MyActivitiesFragment.OnFragmentInteractionListener,
         NewsFragment.OnFragmentInteractionListener,
-        HomeFragment.OnFragmentInteractionListener {
+        HomeFragment.OnFragmentInteractionListener,
+        AddActivityFragment.OnFragmentInteractionListener {
 
     private SqlHelper db;
 
-    private MenuItem previousItem;
+    private boolean dialog_open = false;
 
-    boolean flag = true;
+    private User user;
+
 
     public static FragmentManager fragmentManager;
-
-    private final int dialogFragment = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +63,10 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         db = new SqlHelper(getApplicationContext());
+
+        user = db.getUserByUsername(getIntent().getExtras().getString("mUsername"));
+
+        welcomeToast(user);
 
         fragmentManager = getSupportFragmentManager();
 
@@ -67,8 +77,14 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                //        .setAction("Action", null).show();
+
+                if (dialog_open) {
+                    closeDialog();
+                    dialog_open = false;
+                } else {
+                    openDialog();
+                    dialog_open = true;
+                }
             }
         });
 
@@ -81,10 +97,63 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        navigationView.getMenu().getItem(0).setChecked(true);
-        displayView(R.id.nav_home);
-
+        menuInitialState(navigationView);
     }
+
+    public void welcomeToast(User user) {
+        Context context = getApplicationContext();
+        CharSequence text = "Welcome " + user.getName() + "!";
+        int duration = Toast.LENGTH_LONG;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+    }
+
+    public void menuInitialState(NavigationView navigationView) {
+        navigationView.getMenu().getItem(0).setChecked(true);
+        Fragment fragment = new HomeFragment();
+        String title = getResources().getString(R.string.home);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame, fragment);
+        ft.commit();
+    }
+
+    public void openDialog() {
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        ViewCompat.animate(fab)
+                .rotation(-45)
+                .setDuration(500)
+                .setInterpolator(new BounceInterpolator())
+                .start();
+
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
+        AddActivityFragment addActivityFragment = new AddActivityFragment();
+
+        ft.replace(R.id.content_frame, addActivityFragment);
+        ft.addToBackStack(null);
+
+        // Start the animated transition.
+        ft.commit();
+    }
+
+    public void closeDialog() {
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        ViewCompat.animate(fab)
+                .rotation(0)
+                .setDuration(500)
+                .setInterpolator(new BounceInterpolator())
+                .start();
+
+        getSupportFragmentManager().popBackStackImmediate();
+    }
+
+    ;
 
     @Override
     public void onBackPressed() {
@@ -129,16 +198,15 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        closeDialog();
         // Handle navigation view item clicks here.
-        if (previousItem == item) {
-            return true;
-        }
-        previousItem = item;
         displayView(item.getItemId());
         return true;
     }
 
     public void displayView(int viewId) {
+
+        dialog_open = false;
 
         Fragment fragment = null;
         String title = getString(R.string.app_name);
@@ -168,14 +236,12 @@ public class MainActivity extends AppCompatActivity
                 fragment = new AboutFragment();
                 title = getResources().getString(R.string.about);
                 break;
-            case dialogFragment:
-                fragment = new DialogFragment();
-                break;
         }
 
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);
+            ft.addToBackStack(null);
             ft.commit();
         }
 
@@ -188,7 +254,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
 
     }
-
 
 
     @Override

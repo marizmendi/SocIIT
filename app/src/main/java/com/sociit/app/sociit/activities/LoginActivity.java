@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -63,6 +62,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private boolean newUser = false;
+    private String mUsername;
 
     SqlHelper db;
 
@@ -200,9 +200,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
         String[] emailSplit = email.split("@");
-        if(emailSplit.length>2){
+        if (emailSplit.length > 2) {
             return false;
-        } else if (emailSplit.length==2){
+        } else if (emailSplit.length == 2) {
             return emailSplit[1].equals("hawk.iit.edu");
         } else {
             return true;
@@ -331,11 +331,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             String username = mEmail.split("@")[0];
             User user = db.getUserByUsername(username);
-            if(user==null){
+            mUsername = username;
+            if (user == null) {
                 db.addUser(new User(0, username, username.toUpperCase(), mPassword, null));
                 newUser = true;
                 return true;
             }
+
 
             return mPassword.equals(user.getPassword());
 
@@ -349,7 +351,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                if(newUser){
+                if (newUser) {
                     Context context = getApplicationContext();
                     CharSequence text = "You have been registered, welcome!";
                     int duration = Toast.LENGTH_SHORT;
@@ -359,6 +361,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
                 // Redirect to MainActivity
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.putExtra("mUsername", mUsername);
                 startActivity(intent);
                 finish();
             } else {
