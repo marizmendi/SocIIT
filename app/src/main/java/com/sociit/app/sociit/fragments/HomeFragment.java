@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +13,16 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sociit.app.sociit.R;
+import com.sociit.app.sociit.entities.Building;
+import com.sociit.app.sociit.helpers.SqlHelper;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,7 +32,7 @@ import com.sociit.app.sociit.R;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment implements OnMapReadyCallback {
+public class HomeFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -133,7 +140,27 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mMap.getUiSettings().setRotateGesturesEnabled(false);
         mMap.getUiSettings().setTiltGesturesEnabled(false);
 
+        mMap.setOnMarkerClickListener(this);
+
+        SqlHelper db = new SqlHelper(getActivity().getApplicationContext());
+        List<Building> buildings = db.getAllBuildings();
+        for(int i = 0; i<buildings.size(); i++){
+            Building building = buildings.get(i);
+            LatLng buildingLatLong = new LatLng(building.getAddress().getLatitude(), building.getAddress().getLongitude());
+            mMap.addMarker(new MarkerOptions()
+                    .position(buildingLatLong)
+                    .title(building.getName()));
+        }
+
+
+
     }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        return false;
+    }
+
 
     /**
      * This interface must be implemented by activities that contain this

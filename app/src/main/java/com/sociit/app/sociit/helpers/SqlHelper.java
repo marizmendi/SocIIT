@@ -24,7 +24,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     private static final String LOG = "SqlHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 8;
     // Database Name
     private static final String DATABASE_NAME = "SociitDB";
 
@@ -139,16 +139,36 @@ public class SqlHelper extends SQLiteOpenHelper {
     }
 
     private void prepopulateDB(SQLiteDatabase db) {
-        Address building_address = new Address(Locale.getDefault());
-        building_address.setAddressLine(0, "31 street");
-        Building building = new Building(0, building_address, "Edificio1", null);
-        Activity activity = new Activity(0, "Actividad1", building, null, null);
+
+        //TODO: Fix latitudes and longitudes and add missing buildings
+        Address mtcc_address = new Address(Locale.getDefault());
+        mtcc_address.setLatitude(41.835605);
+        mtcc_address.setLongitude(-87.6282507);
+        Building mtcc = new Building(0, mtcc_address, "MTCC", null);
+
+        Address stuart_address = new Address(Locale.getDefault());
+        stuart_address.setLatitude(41.838682);
+        stuart_address.setLongitude(-87.627353);
+        Building stuart = new Building(0, stuart_address, "Stuart Building", null);
+
+        Address hermann_address = new Address(Locale.getDefault());
+        hermann_address.setLatitude(41.835685);
+        hermann_address.setLongitude(-87.628373);
+        Building hermann = new Building(0, hermann_address, "Hermann Hall", null);
+
+        this.addBuilding(mtcc,db);
+        this.addBuilding(stuart, db);
+        this.addBuilding(hermann, db);
+
+        Activity activity = new Activity(0, "Actividad1", mtcc, null, null);
         this.addActivity(activity, db);
 
         User user1 = new User(0, "foo", "FOO", "hello", null);
         this.addUser(user1, db);
         User user2 = new User(0, "bar", "BAR", "world", null);
         this.addUser(user2, db);
+
+
 
     }
 
@@ -229,7 +249,7 @@ public class SqlHelper extends SQLiteOpenHelper {
 
     public void addActivity(Activity activity, SQLiteDatabase db) {
 
-        Log.d("addActivity", activity.toString());
+        Log.d("addActivity", activity.getName());
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
@@ -280,6 +300,20 @@ public class SqlHelper extends SQLiteOpenHelper {
         return null;
     }
 
+    public void addBuilding(Building building, SQLiteDatabase db) {
+        Log.d("addBuilding", building.getName());
+
+        // 2. create ContentValues to add key "column"/value
+        ContentValues values = new ContentValues();
+        values.put(KEY_BUILDING_NAME, building.getName());
+        values.put(KEY_BUILDING_ADDRESS, building.getAddress().getLatitude()+":"+building.getAddress().getLongitude());
+
+        // 3. insert
+        db.insert(TABLE_BUILDING, // table
+                null, //nullColumnHack
+                values); // key/value -> keys = column names/values
+    }
+
     public List<Activity> getBuildingActivities(Building building) {
         return null;
     }
@@ -293,7 +327,34 @@ public class SqlHelper extends SQLiteOpenHelper {
     }
 
     public List<Building> getAllBuildings() {
-        return null;
+        List<Building> buildings = new LinkedList<Building>();
+
+        // 1. build the query
+        String query = "SELECT  * FROM " + TABLE_BUILDING;
+
+        // 2. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        // 3. go over each row, build book and add it to list
+        Building building = null;
+        if (cursor.moveToFirst()) {
+            do {
+                building = new Building();
+                building.setId(Integer.parseInt(cursor.getString(0)));
+                building.setName(cursor.getString(1));
+                Address address = new Address(Locale.getDefault());
+                address.setLatitude(Double.parseDouble(cursor.getString(2).split(":")[0]));
+                address.setLongitude(Double.parseDouble(cursor.getString(2).split(":")[1]));
+                building.setAddress(address);
+                buildings.add(building);
+            } while (cursor.moveToNext());
+        }
+
+        Log.d("getAllBuildings()", buildings.toString());
+        db.close();
+
+        return buildings;
     }
 
     public void addComment(Comment comment) {

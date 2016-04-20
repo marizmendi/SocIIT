@@ -1,10 +1,12 @@
 package com.sociit.app.sociit.activities;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -22,6 +24,7 @@ import com.sociit.app.sociit.R;
 import com.sociit.app.sociit.entities.Activity;
 import com.sociit.app.sociit.fragments.AboutFragment;
 import com.sociit.app.sociit.fragments.ActivityFragment;
+import com.sociit.app.sociit.fragments.AddActivityDialogFragment;
 import com.sociit.app.sociit.fragments.BuildingsFragment;
 import com.sociit.app.sociit.fragments.HomeFragment;
 import com.sociit.app.sociit.fragments.MyActivitiesFragment;
@@ -36,12 +39,17 @@ public class MainActivity extends AppCompatActivity
         BuildingsFragment.OnFragmentInteractionListener,
         MyActivitiesFragment.OnFragmentInteractionListener,
         NewsFragment.OnFragmentInteractionListener,
-        HomeFragment.OnFragmentInteractionListener
-         {
+        HomeFragment.OnFragmentInteractionListener {
 
     private SqlHelper db;
 
+    private MenuItem previousItem;
+
+    boolean flag = true;
+
     public static FragmentManager fragmentManager;
+
+    private final int dialogFragment = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +130,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        if (previousItem == item) {
+            return true;
+        }
+        previousItem = item;
         displayView(item.getItemId());
         return true;
     }
@@ -156,6 +168,9 @@ public class MainActivity extends AppCompatActivity
                 fragment = new AboutFragment();
                 title = getResources().getString(R.string.about);
                 break;
+            case dialogFragment:
+                fragment = new DialogFragment();
+                break;
         }
 
         if (fragment != null) {
@@ -173,6 +188,8 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
 
     }
+
+
 
     @Override
     public void onFragmentInteraction(Uri uri) {

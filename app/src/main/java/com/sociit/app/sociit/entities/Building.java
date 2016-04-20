@@ -20,6 +20,11 @@ public class Building {
         this.activityList = activityList;
     }
 
+    public Building() {
+
+    }
+
+
     public int getId() {
         return id;
     }
