@@ -24,7 +24,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     private static final String LOG = "SqlHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 11;
     // Database Name
     private static final String DATABASE_NAME = "SociitDB";
 
@@ -42,7 +42,6 @@ public class SqlHelper extends SQLiteOpenHelper {
     // ACTIVITIES Table - column names
     private static final String KEY_ACTIVITY_NAME = "name";
     private static final String KEY_ACTIVITY_BUILDING = "building";
-    private static final String KEY_ACTIVITY_USER = "user";
 
     // BUILDINGS Table - column names
     private static final String KEY_BUILDING_NAME = "name";
@@ -142,8 +141,8 @@ public class SqlHelper extends SQLiteOpenHelper {
 
         //TODO: Fix latitudes and longitudes and add missing buildings
         Address mtcc_address = new Address(Locale.getDefault());
-        mtcc_address.setLatitude(41.835605);
-        mtcc_address.setLongitude(-87.6282507);
+        mtcc_address.setLatitude(41.835728);
+        mtcc_address.setLongitude(-87.625956);
         Building mtcc = new Building(0, mtcc_address, "MTCC", null);
 
         Address stuart_address = new Address(Locale.getDefault());
@@ -156,7 +155,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         hermann_address.setLongitude(-87.628373);
         Building hermann = new Building(0, hermann_address, "Hermann Hall", null);
 
-        this.addBuilding(mtcc,db);
+        this.addBuilding(mtcc, db);
         this.addBuilding(stuart, db);
         this.addBuilding(hermann, db);
 
@@ -167,8 +166,6 @@ public class SqlHelper extends SQLiteOpenHelper {
         this.addUser(user1, db);
         User user2 = new User(0, "bar", "BAR", "world", null);
         this.addUser(user2, db);
-
-
 
     }
 

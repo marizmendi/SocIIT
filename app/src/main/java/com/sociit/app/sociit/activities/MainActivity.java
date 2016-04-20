@@ -135,8 +135,6 @@ public class MainActivity extends AppCompatActivity
 
         ft.replace(R.id.content_frame, addActivityFragment);
         ft.addToBackStack(null);
-
-        // Start the animated transition.
         ft.commit();
     }
 
