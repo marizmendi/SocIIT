@@ -10,6 +10,10 @@ import android.util.Log;
 
 import com.sociit.app.sociit.entities.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -24,7 +28,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     private static final String LOG = "SqlHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 13;
     // Database Name
     private static final String DATABASE_NAME = "SociitDB";
 
@@ -35,13 +39,13 @@ public class SqlHelper extends SQLiteOpenHelper {
     private static final String TABLE_USER = "users";
     private static final String TABLE_USER_ACTIVITY = "users_activities";
 
-
     // Common column names
     private static final String KEY_ID = "id";
 
     // ACTIVITIES Table - column names
     private static final String KEY_ACTIVITY_NAME = "name";
     private static final String KEY_ACTIVITY_BUILDING = "building";
+    private static final String KEY_ACTIVITY_DATE = "date";
 
     // BUILDINGS Table - column names
     private static final String KEY_BUILDING_NAME = "name";
@@ -67,6 +71,7 @@ public class SqlHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + TABLE_ACTIVITY + "(" +
                     KEY_ID + " INTEGER PRIMARY KEY," +
                     KEY_ACTIVITY_NAME + " TEXT," +
+                    KEY_ACTIVITY_DATE + " TEXT," +
                     KEY_ACTIVITY_BUILDING + " INTEGER, " +
                     "FOREIGN KEY(" + KEY_ACTIVITY_BUILDING + ") REFERENCES buildings(" + KEY_ID + ")" +
                     ")";
@@ -143,23 +148,33 @@ public class SqlHelper extends SQLiteOpenHelper {
         Address mtcc_address = new Address(Locale.getDefault());
         mtcc_address.setLatitude(41.835728);
         mtcc_address.setLongitude(-87.625956);
-        Building mtcc = new Building(0, mtcc_address, "MTCC", null);
+        Building mtcc = new Building(1, mtcc_address, "MTCC", null);
 
         Address stuart_address = new Address(Locale.getDefault());
         stuart_address.setLatitude(41.838682);
         stuart_address.setLongitude(-87.627353);
-        Building stuart = new Building(0, stuart_address, "Stuart Building", null);
+        Building stuart = new Building(2, stuart_address, "Stuart Building", null);
 
         Address hermann_address = new Address(Locale.getDefault());
         hermann_address.setLatitude(41.835685);
         hermann_address.setLongitude(-87.628373);
-        Building hermann = new Building(0, hermann_address, "Hermann Hall", null);
+        Building hermann = new Building(3, hermann_address, "Hermann Hall", null);
 
         this.addBuilding(mtcc, db);
         this.addBuilding(stuart, db);
         this.addBuilding(hermann, db);
 
-        Activity activity = new Activity(0, "Actividad1", mtcc, null, null);
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy");
+        Date date = new Date();
+        try {
+            date = formatter.parse("Thu Jun 18 20:56:02 EDT 2009");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        mtcc = this.getBuildingByName("mtcc", db);
+
+        Activity activity = new Activity(0, "Actividad1", mtcc, date, null, null);
         this.addActivity(activity, db);
 
         User user1 = new User(0, "foo", "FOO", "hello", null);
@@ -221,7 +236,7 @@ public class SqlHelper extends SQLiteOpenHelper {
 
         User returnUser;
 
-        if(users.size()==0){
+        if (users.size() == 0) {
             returnUser = null;
         } else {
             returnUser = users.get(0);
@@ -252,6 +267,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_ACTIVITY_NAME, activity.getName()); // get name
         values.put(KEY_ACTIVITY_BUILDING, activity.getBuilding().getId()); // get building
+        values.put(KEY_ACTIVITY_DATE, activity.getDate().toString());
         //values.put(KEY_ACTIVITY_USER, activity.getUserList().get(0).getId());
 
         // 3. insert
@@ -281,7 +297,14 @@ public class SqlHelper extends SQLiteOpenHelper {
                 activity = new Activity();
                 activity.setId(Integer.parseInt(cursor.getString(0)));
                 activity.setName(cursor.getString(1));
-
+                SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy");
+                Date activityDate = new Date();
+                try {
+                    activityDate = formatter.parse(cursor.getString(2));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                activity.setDate(activityDate);
                 // Add book to books
                 activities.add(activity);
             } while (cursor.moveToNext());
@@ -303,7 +326,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
         values.put(KEY_BUILDING_NAME, building.getName());
-        values.put(KEY_BUILDING_ADDRESS, building.getAddress().getLatitude()+":"+building.getAddress().getLongitude());
+        values.put(KEY_BUILDING_ADDRESS, building.getAddress().getLatitude() + ":" + building.getAddress().getLongitude());
 
         // 3. insert
         db.insert(TABLE_BUILDING, // table
@@ -321,6 +344,43 @@ public class SqlHelper extends SQLiteOpenHelper {
 
     public void deleteActivity(Activity activity) {
         return;
+    }
+
+    public Building getBuildingByName(String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Building building = this.getBuildingByName(name, db);
+        db.close();
+        return building;
+    }
+
+    public Building getBuildingByName(String name, SQLiteDatabase db) {
+        String query = "SELECT * FROM " + TABLE_BUILDING + " WHERE name LIKE \"" + name + "\"";
+        List<Building> buildings = new LinkedList<Building>();
+        Cursor cursor = db.rawQuery(query, null);
+
+        Building building = null;
+        if (cursor.moveToFirst()) {
+            do {
+                building = new Building();
+                building.setId(Integer.parseInt(cursor.getString(0)));
+                building.setName(cursor.getString(1));
+                Address address = new Address(Locale.getDefault());
+                address.setLatitude(Double.parseDouble(cursor.getString(2).split(":")[0]));
+                address.setLongitude(Double.parseDouble(cursor.getString(2).split(":")[1]));
+                building.setAddress(address);
+                buildings.add(building);
+            } while (cursor.moveToNext());
+        }
+
+        Building returnBuilding;
+
+        if (buildings.size() == 0) {
+            returnBuilding = null;
+        } else {
+            returnBuilding = buildings.get(0);
+        }
+
+        return returnBuilding;
     }
 
     public List<Building> getAllBuildings() {

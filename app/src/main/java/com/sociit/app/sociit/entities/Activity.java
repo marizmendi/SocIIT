@@ -1,5 +1,6 @@
 package com.sociit.app.sociit.entities;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -9,15 +10,18 @@ public class Activity {
     int id;
     String name;
     Building building;
+    Date date;
     List<User> userList;
     List<Comment> commentList;
 
-    public Activity(int id, String name, Building building, List<User> userList, List<Comment> commentList) {
+    public Activity(int id, String name, Building building, Date date, List<User> userList, List<Comment> commentList) {
         this.id = id;
         this.name = name;
         this.userList = userList;
         this.building = building;
+
         this.commentList = commentList;
+        this.date = date;
     }
 
     public Activity() {
@@ -45,6 +49,14 @@ public class Activity {
 
     public void setBuilding(Building building) {
         this.building = building;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public List<User> getUserList() {
