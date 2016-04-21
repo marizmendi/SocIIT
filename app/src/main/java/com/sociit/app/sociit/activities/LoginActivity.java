@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -19,7 +18,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,7 +27,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.sociit.app.sociit.R;
 import com.sociit.app.sociit.entities.User;
@@ -61,7 +58,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private boolean newUser = false;
+    private boolean userNotFound = false;
     private String mUsername;
 
     SqlHelper db;
@@ -211,7 +208,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return true; //password.length() > 4;
+        return password.length() > 4;
     }
 
     /**
@@ -333,9 +330,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             User user = db.getUserByUsername(username);
             mUsername = username;
             if (user == null) {
-                db.addUser(new User(0, username, username.toUpperCase(), mPassword, null));
-                newUser = true;
-                return true;
+                userNotFound = true;
+                return false;
             }
 
 
@@ -351,22 +347,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                if (newUser) {
-                    Context context = getApplicationContext();
-                    CharSequence text = "You have been registered, welcome!";
-                    int duration = Toast.LENGTH_SHORT;
-
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                }
+                userNotFound=false;
                 // Redirect to MainActivity
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra("mUsername", mUsername);
                 startActivity(intent);
                 finish();
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                if (userNotFound) {
+                    mEmailView.setError("The user doesnt exist");
+                    mEmailView.requestFocus();
+                    mPasswordView.setText("");
+                } else {
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                    mPasswordView.requestFocus();
+                }
             }
         }
 
