@@ -18,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -164,7 +165,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (!isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -208,7 +209,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length()>4;
     }
 
     /**
@@ -347,7 +348,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                userNotFound=false;
                 // Redirect to MainActivity
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra("mUsername", mUsername);
@@ -355,7 +355,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 finish();
             } else {
                 if (userNotFound) {
-                    mEmailView.setError("The user doesnt exist");
+                    mEmailView.setError("The user doesn't exist");
                     mEmailView.requestFocus();
                     mPasswordView.setText("");
                 } else {
@@ -363,6 +363,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     mPasswordView.requestFocus();
                 }
             }
+            userNotFound=false;
         }
 
         @Override
