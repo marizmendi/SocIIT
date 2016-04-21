@@ -12,7 +12,7 @@ import com.sociit.app.sociit.R;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Splash extends Activity {
+public class SplashActivity extends Activity {
 
     /** Duration of wait **/
     private final int SPLASH_DISPLAY_LENGTH = 6000;
@@ -32,11 +32,11 @@ public class Splash extends Activity {
         TimerTask showSplash = new TimerTask() {
             @Override
             public void run() {
-                //Close Splash.class
+                //Close SplashActivity.class
                 finish();
 
                 //Start QuoteReaderActivity.class
-                Intent mainIntent = new Intent(Splash.this, LoginActivity.class);
+                Intent mainIntent = new Intent(SplashActivity.this, LoginActivity.class);
                 startActivity(mainIntent);
             }
         };
