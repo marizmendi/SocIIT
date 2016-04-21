@@ -70,7 +70,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/action_sign_in"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:background="@color/colorPrimary"
+                android:textColor="#ffffff"/>
+
+            <Button
+                style="?android:textAppearanceSmall"
+                android:id="@+id/go_to_register_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/action_go_to_register"
+                android:textStyle="bold"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="#ffffff"
+                android:layout_gravity="center_horizontal"/>
 
         </LinearLayout>
     </ScrollView>
