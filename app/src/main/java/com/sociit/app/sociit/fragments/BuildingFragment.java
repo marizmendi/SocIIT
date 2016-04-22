@@ -6,22 +6,21 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.sociit.app.sociit.R;
-import com.sociit.app.sociit.entities.Activity;
+import com.sociit.app.sociit.entities.Building;
 import com.sociit.app.sociit.helpers.SqlHelper;
 
 /**
  * A fragment representing a list of Items.
- * <p/>
+ * <p>
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ActivityFragment extends Fragment {
+public class BuildingFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -33,13 +32,13 @@ public class ActivityFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ActivityFragment() {
+    public BuildingFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static ActivityFragment newInstance(int columnCount) {
-        ActivityFragment fragment = new ActivityFragment();
+    public static BuildingFragment newInstance(int columnCount) {
+        BuildingFragment fragment = new BuildingFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -58,7 +57,7 @@ public class ActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_activity_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_building_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -71,12 +70,7 @@ public class ActivityFragment extends Fragment {
             }
             // call db to list activities
             SqlHelper db = new SqlHelper(getActivity().getApplicationContext());
-            if(this.getArguments() == null){
-                recyclerView.setAdapter(new MyActivityRecyclerViewAdapter(db.getAllActivities(), mListener));
-            } else {
-                int userId = this.getArguments().getInt("userId");
-                recyclerView.setAdapter(new MyActivityRecyclerViewAdapter(db.getActivitiesByUserId(userId), mListener));
-            }
+            recyclerView.setAdapter(new MyBuildingRecyclerViewAdapter(db.getAllBuildings(), mListener));
         }
         return view;
     }
@@ -104,13 +98,13 @@ public class ActivityFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(Activity activity);
+        void onListFragmentInteraction(Building building);
     }
 }

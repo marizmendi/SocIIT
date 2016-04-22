@@ -12,6 +12,7 @@ import com.sociit.app.sociit.entities.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -28,7 +29,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     private static final String LOG = "SqlHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 21;
     // Database Name
     private static final String DATABASE_NAME = "SociitDB";
 
@@ -143,6 +144,10 @@ public class SqlHelper extends SQLiteOpenHelper {
     }
 
     private void prepopulateDB(SQLiteDatabase db) {
+        User user1 = new User(0, "foo", "FOO", "hello", null);
+        this.addUser(user1, db);
+        User user2 = new User(0, "bar", "BAR", "world", null);
+        this.addUser(user2, db);
 
         //TODO: Fix latitudes and longitudes and add missing buildings
         Address mtcc_address = new Address(Locale.getDefault());
@@ -177,10 +182,13 @@ public class SqlHelper extends SQLiteOpenHelper {
         Activity activity = new Activity(0, "Actividad1", mtcc, date, null, null);
         this.addActivity(activity, db);
 
-        User user1 = new User(0, "foo", "FOO", "hello", null);
-        this.addUser(user1, db);
-        User user2 = new User(0, "bar", "BAR", "world", null);
-        this.addUser(user2, db);
+
+        List<User> userList = new ArrayList<>();
+        User foo = this.getUserByUsername("foo", db);
+        userList.add(foo);
+
+        Activity activityFoo = new Activity(0, "ActividadFoo", mtcc, date, userList, null);
+        this.addActivity(activityFoo, db);
 
     }
 
@@ -209,6 +217,43 @@ public class SqlHelper extends SQLiteOpenHelper {
                 values); // key/value -> keys = column names/values
     }
 
+    public User getUserById(int userId, SQLiteDatabase db) {
+        String query = "SELECT * FROM " + TABLE_USER + " WHERE " + KEY_ID + " LIKE \"" + userId + "\"";
+        List<User> users = new LinkedList<User>();
+        Cursor cursor = db.rawQuery(query, null);
+
+        User user = null;
+        if (cursor.moveToFirst()) {
+            do {
+                user = new User();
+                user.setId(Integer.parseInt(cursor.getString(0)));
+                user.setName(cursor.getString(1));
+                user.setUsername(cursor.getString(2));
+                user.setPassword(cursor.getString(3));
+
+                users.add(user);
+            } while (cursor.moveToNext());
+        }
+
+        User returnUser;
+
+        if (users.size() == 0) {
+            returnUser = null;
+        } else {
+            returnUser = users.get(0);
+        }
+
+        return returnUser;
+    }
+
+    public User geUserById(int userId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        User user = getUserById(userId, db);
+        db.close();
+        return user;
+    }
+
+
     public User getUserByUsername(String username) {
         SQLiteDatabase db = this.getWritableDatabase();
         User user = getUserByUsername(username, db);
@@ -217,7 +262,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     }
 
     public User getUserByUsername(String username, SQLiteDatabase db) {
-        String query = "SELECT * FROM " + TABLE_USER + " WHERE username LIKE \"" + username + "\"";
+        String query = "SELECT * FROM " + TABLE_USER + " WHERE " + KEY_USER_USERNAME + " LIKE \"" + username + "\"";
         List<User> users = new LinkedList<User>();
         Cursor cursor = db.rawQuery(query, null);
 
@@ -274,10 +319,160 @@ public class SqlHelper extends SQLiteOpenHelper {
         db.insert(TABLE_ACTIVITY, // table
                 null, //nullColumnHack
                 values); // key/value -> keys = column names/values
+
+        if (activity.getUserList() != null) {
+            this.linkUserActivity(activity.getCreator(), this.getActivityByName(activity.getName(), db), db);
+        }
+    }
+
+    public void linkUserActivity(User user, Activity activity) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        linkUserActivity(user, activity, db);
+        db.close();
+    }
+
+    public void linkUserActivity(User user, Activity activity, SQLiteDatabase db) {
+        // 2. create ContentValues to add key "column"/value
+        ContentValues values = new ContentValues();
+        values.put(KEY_USER_ACTIVITY_USER, user.getId()); // get name
+        values.put(KEY_USER_ACTIVITY_ACTIVITY, activity.getId()); // get building
+
+        // 3. insert
+        db.insert(TABLE_USER_ACTIVITY, // table
+                null, //nullColumnHack
+                values); // key/value -> keys = column names/values
+    }
+
+    public Activity getActivityById(int id, SQLiteDatabase db) {
+        List<Activity> activities = new LinkedList<Activity>();
+
+        // 1. build the query
+        String query = "SELECT  * FROM " + TABLE_ACTIVITY + " WHERE " + KEY_ID + " LIKE \"" + id + "\"";
+
+        // 2. get reference to writable DB
+        Cursor cursor = db.rawQuery(query, null);
+
+        // 3. go over each row, build book and add it to list
+        Activity activity = null;
+        if (cursor.moveToFirst()) {
+            do {
+                activity = new Activity();
+                activity.setId(Integer.parseInt(cursor.getString(0)));
+                activity.setName(cursor.getString(1));
+                SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy");
+                Date activityDate = new Date();
+                try {
+                    activityDate = formatter.parse(cursor.getString(2));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                activity.setDate(activityDate);
+                // Add book to books
+                activities.add(activity);
+            } while (cursor.moveToNext());
+        }
+
+        Log.d("getActivityById()", activities.toString());
+
+        Activity returnActivity;
+
+        if (activities.size() == 0) {
+            returnActivity = null;
+        } else {
+            returnActivity = activities.get(0);
+        }
+
+        return returnActivity;
+
     }
 
     public Activity getActivityById(int id) {
-        return null;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Activity returnActivity = this.getActivityById(id, db);
+        db.close();
+        return returnActivity;
+    }
+
+    public Activity getActivityByName(String name, SQLiteDatabase db) {
+        List<Activity> activities = new LinkedList<Activity>();
+
+        // 1. build the query
+        String query = "SELECT  * FROM " + TABLE_ACTIVITY + " WHERE " + KEY_ACTIVITY_NAME + " LIKE \"" + name + "\"";
+
+        // 2. get reference to writable DB
+        Cursor cursor = db.rawQuery(query, null);
+
+        // 3. go over each row, build book and add it to list
+        Activity activity = null;
+        if (cursor.moveToFirst()) {
+            do {
+                activity = new Activity();
+                activity.setId(Integer.parseInt(cursor.getString(0)));
+                activity.setName(cursor.getString(1));
+                SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy");
+                Date activityDate = new Date();
+                try {
+                    activityDate = formatter.parse(cursor.getString(2));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                activity.setDate(activityDate);
+                // Add book to books
+                activities.add(activity);
+            } while (cursor.moveToNext());
+        }
+
+        Log.d("getAllActivities()", activities.toString());
+
+        Activity returnActivity;
+
+        if (activities.size() == 0) {
+            returnActivity = null;
+        } else {
+            returnActivity = activities.get(0);
+        }
+
+        return returnActivity;
+
+    }
+
+    public Activity getActivityByName(String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Activity returnActivity = this.getActivityByName(name, db);
+        db.close();
+        return returnActivity;
+    }
+
+
+    public List<Activity> getActivitiesByUserId(int userId) {
+        List<Activity> activities = new LinkedList<Activity>();
+
+        // 1. build the query
+        String query = "SELECT  * FROM " + TABLE_USER_ACTIVITY + " WHERE " + KEY_USER_ACTIVITY_USER + " LIKE \"" + userId + "\"";
+
+        // 2. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        // 3. go over each row, build book and add it to list
+        Activity activity = null;
+        if (cursor.moveToFirst()) {
+            do {
+                int columnIndex = cursor.getColumnIndex(KEY_USER_ACTIVITY_ACTIVITY);
+
+                Log.d("columnIndex", columnIndex+"");
+                Log.d("activityId", cursor.getString(columnIndex));
+
+                activity = this.getActivityById(Integer.parseInt(cursor.getString(columnIndex)));
+
+                activities.add(activity);
+            } while (cursor.moveToNext());
+        }
+
+        Log.d("getActByUserId()", activities.toString());
+        db.close();
+
+        return activities; // return books
     }
 
     public List<Activity> getAllActivities() {
@@ -317,7 +512,11 @@ public class SqlHelper extends SQLiteOpenHelper {
     }
 
     public List<Activity> getUserActivities(User user) {
-        return null;
+        List<Activity> activityList = new LinkedList<>();
+        Activity activity = new Activity();
+        activity.setName("TODO");
+        activityList.add(activity);
+        return activityList;
     }
 
     public void addBuilding(Building building, SQLiteDatabase db) {
@@ -335,7 +534,11 @@ public class SqlHelper extends SQLiteOpenHelper {
     }
 
     public List<Activity> getBuildingActivities(Building building) {
-        return null;
+        List<Activity> activityList = new LinkedList<>();
+        Activity activity = new Activity();
+        activity.setName("TODO");
+        activityList.add(activity);
+        return activityList;
     }
 
     public void editActivity(Activity activity) {

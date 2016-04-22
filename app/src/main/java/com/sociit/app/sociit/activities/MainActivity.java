@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -21,19 +20,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
-import android.view.animation.OvershootInterpolator;
-import android.view.animation.ScaleAnimation;
 import android.widget.Toast;
 
 import com.sociit.app.sociit.R;
 import com.sociit.app.sociit.entities.Activity;
+import com.sociit.app.sociit.entities.Building;
 import com.sociit.app.sociit.entities.User;
 import com.sociit.app.sociit.fragments.AboutFragment;
 import com.sociit.app.sociit.fragments.ActivityFragment;
 import com.sociit.app.sociit.fragments.AddActivityFragment;
-import com.sociit.app.sociit.fragments.BuildingsFragment;
+import com.sociit.app.sociit.fragments.BuildingFragment;
 import com.sociit.app.sociit.fragments.HomeFragment;
-import com.sociit.app.sociit.fragments.MyActivitiesFragment;
 import com.sociit.app.sociit.fragments.NewsFragment;
 import com.sociit.app.sociit.helpers.SqlHelper;
 
@@ -42,8 +39,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView.OnNavigationItemSelectedListener,
         AboutFragment.OnFragmentInteractionListener,
         ActivityFragment.OnListFragmentInteractionListener,
-        BuildingsFragment.OnFragmentInteractionListener,
-        MyActivitiesFragment.OnFragmentInteractionListener,
+        BuildingFragment.OnListFragmentInteractionListener,
         NewsFragment.OnFragmentInteractionListener,
         HomeFragment.OnFragmentInteractionListener,
         AddActivityFragment.OnFragmentInteractionListener {
@@ -215,11 +211,14 @@ public class MainActivity extends AppCompatActivity
                 title = getResources().getString(R.string.home);
                 break;
             case R.id.nav_my_activities:
-                fragment = new MyActivitiesFragment();
+                fragment = new ActivityFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("userId",this.user.getId());
+                fragment.setArguments(bundle);
                 title = getResources().getString(R.string.my_activities);
                 break;
             case R.id.nav_buildings:
-                fragment = new BuildingsFragment();
+                fragment = new BuildingFragment();
                 title = getResources().getString(R.string.buildings);
                 break;
             case R.id.nav_activities:
@@ -261,7 +260,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onListFragmentInteraction(Activity activity) {
-        Log.d("onListFragmentInteract", activity.toString());
+        Log.d("onListFragmentInteract", activity.getName());
     }
 
+    @Override
+    public void onListFragmentInteraction(Building building) {
+        Log.d("onListFragmentInteract", building.getName());
+    }
 }

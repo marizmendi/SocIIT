@@ -63,6 +63,10 @@ public class Activity {
         return userList;
     }
 
+    public User getCreator() {
+        return this.userList != null ? this.userList.get(0) : null;
+    }
+
     public void setUserList(List<User> userList) {
         this.userList = userList;
     }
