@@ -228,7 +228,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         } else if (emailSplit.length == 2) {
             return emailSplit[1].equals("hawk.iit.edu");
         } else {
-            return true;
+            return false;
         }
     }
 
