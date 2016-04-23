@@ -166,9 +166,39 @@ public class SqlHelper extends SQLiteOpenHelper {
         hermann_address.setLongitude(-87.628373);
         Building hermann = new Building(3, hermann_address, "Hermann Hall", null);
 
+        Address crownHall_address = new Address(Locale.getDefault());
+        crownHall_address.setLatitude(41.8331938);
+        crownHall_address.setLongitude(-87.6294636);
+        Building crownHall = new Building(4, crownHall_address, "S. R. Crown Hall", null);
+
+        Address library_address = new Address(Locale.getDefault());
+        library_address.setLatitude(41.8340731);
+        library_address.setLongitude(-87.6281547);
+        Building library = new Building(5, library_address, "Paul V Galvin Library", null);
+
+        Address keating_address = new Address(Locale.getDefault());
+        keating_address.setLatitude(41.8383843);
+        keating_address.setLongitude(-87.6264233);
+        Building keating = new Building(6, keating_address, "Keating Sports Center", null);
+
+        Address vanderCook_address = new Address(Locale.getDefault());
+        vanderCook_address.setLatitude(41.8363401);
+        vanderCook_address.setLongitude(-87.6284961);
+        Building vanderCook = new Building(7, keating_address, "VanderCook College of Music", null);
+
+        Address iitTower_address = new Address(Locale.getDefault());
+        iitTower_address.setLatitude(41.8313864);
+        iitTower_address.setLongitude(-87.6278956);
+        Building iitTower = new Building(8, keating_address, "IIT Tower", null);
+
         this.addBuilding(mtcc, db);
         this.addBuilding(stuart, db);
         this.addBuilding(hermann, db);
+        this.addBuilding(crownHall, db);
+        this.addBuilding(library, db);
+        this.addBuilding(keating, db);
+        this.addBuilding(vanderCook, db);
+        this.addBuilding(iitTower, db);
 
         SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy");
         Date date = new Date();
