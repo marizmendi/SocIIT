@@ -9,8 +9,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.sociit.app.sociit.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +36,9 @@ public class AddActivityFragment extends DialogFragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private Spinner spinner;
+
 
     public AddActivityFragment() {
         // Required empty public constructor
@@ -57,6 +65,18 @@ public class AddActivityFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        List<String> buildingsArray = new ArrayList<String>();
+        buildingsArray.add("MTCC");
+        buildingsArray.add("Stuart Building");
+        buildingsArray.add("Hermann Hall");
+        buildingsArray.add("S. R. Crown Hall");
+        buildingsArray.add("Paul V Galvin Library");
+        buildingsArray.add("Keating Sports Center");
+        buildingsArray.add("VanderCook College of Music");
+        buildingsArray.add("IIT Tower");
+        buildingsArray.add("IIT Tower");
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);

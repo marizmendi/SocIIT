@@ -1,18 +1,75 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="com.sociit.app.sociit.fragments.AddActivityFragment">
+             tools:context="com.sociit.app.sociit.fragments.AddActivityFragment"
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TextView
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="ADD ACTIVITY FORM"
-        android:id="@+id/textView2"
-        android:layout_gravity="center"
-        android:textSize="80dp"
-        android:gravity="center_vertical|center_horizontal"/>
-</FrameLayout>
+        android:id="@+id/scrollView" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Create a new activity"
+                android:id="@+id/textView2"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold"
+                android:textSize="25sp" />
+
+            <AutoCompleteTextView
+                android:id="@+id/activityName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Activity name"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="113dp"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:id="@+id/activityDescription"
+                android:hint="Activity description" />
+
+            <DatePicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/datePicker"
+                android:spinnersShown="true"
+                android:layout_gravity="center_horizontal" />
+
+            <TimePicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/timePicker" />
+
+            <Button
+                android:layout_width="152dp"
+                android:layout_height="wrap_content"
+                android:text="Create activity"
+                android:id="@+id/button"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/colorPrimary" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
