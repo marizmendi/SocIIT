@@ -201,6 +201,11 @@ public class SqlHelper extends SQLiteOpenHelper {
         perlstein_address.setLongitude(-87.6271206);
         Building perlstein = new Building(10, perlstein_address, "Perlstein Hall", null);
 
+        Address wishnick_address = new Address(Locale.getDefault());
+        wishnick_address.setLatitude(41.8348128);
+        wishnick_address.setLongitude(-87.6273834);
+        Building wishnick = new Building(11, wishnick_address, "Wishnick Hall", null);
+
         this.addBuilding(mtcc, db);
         this.addBuilding(stuart, db);
         this.addBuilding(hermann, db);
@@ -211,6 +216,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         this.addBuilding(iitTower, db);
         this.addBuilding(lifeSciencies, db);
         this.addBuilding(perlstein, db);
+        this.addBuilding(wishnick, db);
 
         SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy");
         Date date = new Date();
