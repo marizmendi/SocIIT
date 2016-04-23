@@ -6,14 +6,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.location.Address;
-import android.util.Log;
 
-import com.sociit.app.sociit.entities.*;
+import com.sociit.app.sociit.entities.Activity;
+import com.sociit.app.sociit.entities.Building;
+import com.sociit.app.sociit.entities.Comment;
+import com.sociit.app.sociit.entities.User;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -207,7 +208,6 @@ public class SqlHelper extends SQLiteOpenHelper {
 
     public void addUser(User user, SQLiteDatabase db) {
 
-        Log.d("addUser", user.toString());
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
@@ -310,7 +310,6 @@ public class SqlHelper extends SQLiteOpenHelper {
 
     public void addActivity(Activity activity, SQLiteDatabase db) {
 
-        Log.d("addActivity", activity.getName());
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
@@ -378,7 +377,6 @@ public class SqlHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
-        Log.d("getActivityById()", activities.toString());
 
         Activity returnActivity;
 
@@ -447,7 +445,6 @@ public class SqlHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
-        Log.d("getAllActivities()", activities.toString());
 
         Activity returnActivity;
 
@@ -484,17 +481,12 @@ public class SqlHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 int columnIndex = cursor.getColumnIndex(KEY_USER_ACTIVITY_ACTIVITY);
-
-                Log.d("columnIndex", columnIndex + "");
-                Log.d("activityId", cursor.getString(columnIndex));
-
                 activity = this.getActivityById(Integer.parseInt(cursor.getString(columnIndex)));
 
                 activities.add(activity);
             } while (cursor.moveToNext());
         }
 
-        Log.d("getActByUserId()", activities.toString());
         db.close();
 
         return activities; // return books
@@ -569,7 +561,6 @@ public class SqlHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
-        Log.d("getAllActivities()", activities.toString());
         db.close();
 
         return activities; // return books
@@ -584,7 +575,6 @@ public class SqlHelper extends SQLiteOpenHelper {
     }
 
     public void addBuilding(Building building, SQLiteDatabase db) {
-        Log.d("addBuilding", building.getName());
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
@@ -671,7 +661,6 @@ public class SqlHelper extends SQLiteOpenHelper {
                 address.setLongitude(Double.parseDouble(cursor.getString(2).split(":")[1]));
                 building.setAddress(address);
                 building.setActivityList(this.getActivitiesByBuildingId(building.getId(), db));
-                Log.d("size", building.getActivityList().size()+"");
 
                 buildings.add(building);
             } while (cursor.moveToNext());

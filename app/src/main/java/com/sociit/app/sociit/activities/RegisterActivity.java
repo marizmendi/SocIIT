@@ -64,6 +64,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     private View mLoginFormView;
     private boolean newUser = false;
     private String mUsername;
+    private String mName;
 
     SqlHelper db;
 
@@ -112,7 +113,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         mProgressView = findViewById(R.id.login_progress);
     }
 
-    public void cancel(){
+    public void cancel() {
         finish();
     }
 
@@ -176,6 +177,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         // Store values at the time of the login attempt.
         String name = mEmailView.getText().toString();
         String email = mEmailView.getText().toString();
+        mName = mNameView.getText().toString();
         String password = mPasswordView.getText().toString();
         String password2 = mPasswordView2.getText().toString();
 
@@ -355,8 +357,9 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             String username = mEmail.split("@")[0];
             User user = db.getUserByUsername(username);
             mUsername = username;
+
             if (user == null) {
-                db.addUser(new User(0, username, username.toUpperCase(), mPassword, null));
+                db.addUser(new User(0, username, mName, mPassword, null));
                 newUser = true;
                 return true;
             }
