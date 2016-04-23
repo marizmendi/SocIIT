@@ -1,4 +1,4 @@
-package com.sociit.app.sociit.activities;
+package com.sociit.app.sociit.entities;
 
 import com.sociit.app.sociit.entities.User;
 

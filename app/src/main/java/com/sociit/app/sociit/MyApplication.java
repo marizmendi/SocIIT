@@ -2,7 +2,7 @@ package com.sociit.app.sociit;
 
 import android.app.Application;
 
-import com.sociit.app.sociit.activities.Session;
+import com.sociit.app.sociit.entities.Session;
 
 /**
  * Created by Manuel on 22/04/2016.
