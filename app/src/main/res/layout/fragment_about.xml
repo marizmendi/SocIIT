@@ -12,5 +12,5 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/aboutText"
         android:layout_gravity="center"
-        android:textSize="30dp"/>
+        android:textSize="15dp"/>
 </FrameLayout>

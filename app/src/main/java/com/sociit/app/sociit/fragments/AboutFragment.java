@@ -57,14 +57,7 @@ public class AboutFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        aboutText = (TextView) getView().findViewById(R.id.aboutText);
-        aboutText.setText("SocIIT lets the user find any other user within the university \n" +
-                            "area with interest to do the same activity. This will allow a \n" +
-                            "fast event creation within the community as well as information \n" +
-                            "about the university's scheduled events. \n" +
-                            "\n Manuel Martinez" +
-                            "\n Alejandro Nicolas"+
-                            "\n Lazaro Sanchez");
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -74,8 +67,17 @@ public class AboutFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_about, container, false);
+        View view = inflater.inflate(R.layout.fragment_about, container, false);
+        aboutText = (TextView) view.findViewById(R.id.aboutText);
+        aboutText.setText("SocIIT lets the user find any other user within the university " +
+                            "area with interest to do the same activity. This will allow a " +
+                            "fast event creation within the community as well as information " +
+                            "about the university's scheduled events. " +
+                            "\n Created by:" +
+                            "\n Manuel Martinez" +
+                            "\n Alejandro Nicolas"+
+                            "\n Lazaro Sanchez");
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
