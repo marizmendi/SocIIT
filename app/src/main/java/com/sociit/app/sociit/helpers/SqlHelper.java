@@ -650,14 +650,13 @@ public class SqlHelper extends SQLiteOpenHelper {
         return returnBuilding;
     }
 
-    public List<Building> getAllBuildings() {
+    public List<Building> getAllBuildings(SQLiteDatabase db) {
         List<Building> buildings = new LinkedList<Building>();
 
         // 1. build the query
         String query = "SELECT  * FROM " + TABLE_BUILDING;
 
         // 2. get reference to writable DB
-        SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
         // 3. go over each row, build book and add it to list
@@ -671,13 +670,21 @@ public class SqlHelper extends SQLiteOpenHelper {
                 address.setLatitude(Double.parseDouble(cursor.getString(2).split(":")[0]));
                 address.setLongitude(Double.parseDouble(cursor.getString(2).split(":")[1]));
                 building.setAddress(address);
+                building.setActivityList(this.getActivitiesByBuildingId(building.getId(), db));
+                Log.d("size", building.getActivityList().size()+"");
+
                 buildings.add(building);
             } while (cursor.moveToNext());
         }
+        cursor.close();
 
-        Log.d("getAllBuildings()", buildings.toString());
+        return buildings;
+    }
+
+    public List<Building> getAllBuildings() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        List<Building> buildings = this.getAllBuildings(db);
         db.close();
-
         return buildings;
     }
 

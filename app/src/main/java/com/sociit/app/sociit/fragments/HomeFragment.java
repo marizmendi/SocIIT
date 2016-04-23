@@ -159,7 +159,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         for(int i = 0; i<buildings.size(); i++){
             Building building = buildings.get(i);
             LatLng buildingLatLong = new LatLng(building.getAddress().getLatitude(), building.getAddress().getLongitude());
-            Log.d("LotLong", building.getName() + buildingLatLong.toString());
             mMap.addMarker(new MarkerOptions()
                     .position(buildingLatLong)
                     .title(building.getName()));

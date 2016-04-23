@@ -36,6 +36,8 @@ import com.sociit.app.sociit.fragments.HomeFragment;
 import com.sociit.app.sociit.fragments.NewsFragment;
 import com.sociit.app.sociit.helpers.SqlHelper;
 
+import java.util.Stack;
+
 public class MainActivity extends AppCompatActivity
         implements
         NavigationView.OnNavigationItemSelectedListener,
@@ -53,6 +55,9 @@ public class MainActivity extends AppCompatActivity
 
     private User user;
 
+    String title;
+    private Stack<String> titleHistory = new Stack<>();
+
 
     public static FragmentManager fragmentManager;
 
@@ -60,6 +65,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        title = getString(R.string.app_name);
+        titleHistory.push(title);
 
         db = new SqlHelper(getApplicationContext());
 
@@ -81,7 +89,7 @@ public class MainActivity extends AppCompatActivity
                     closeDialog();
                     dialog_open = false;
                 } else {
-                    openDialog();
+                    openAddActivityFragment();
                     dialog_open = true;
                 }
             }
@@ -111,13 +119,12 @@ public class MainActivity extends AppCompatActivity
     public void menuInitialState(NavigationView navigationView) {
         navigationView.getMenu().getItem(0).setChecked(true);
         Fragment fragment = new HomeFragment();
-        String title = getResources().getString(R.string.home);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_frame, fragment);
         ft.commit();
     }
 
-    public void openDialog() {
+    public void openAddActivityFragment() {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
@@ -131,7 +138,7 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
         AddActivityFragment addActivityFragment = new AddActivityFragment();
-
+        titleHistory.push(title);
         ft.replace(R.id.content_frame, addActivityFragment);
         ft.addToBackStack(null);
         ft.commit();
@@ -159,6 +166,9 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(titleHistory.pop());
+            }
         }
     }
 
@@ -207,7 +217,6 @@ public class MainActivity extends AppCompatActivity
         dialog_open = false;
 
         Fragment fragment = null;
-        String title = getString(R.string.app_name);
 
         switch (viewId) {
             case R.id.nav_home:
@@ -217,7 +226,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_my_activities:
                 fragment = new ActivityFragment();
                 Bundle bundle = new Bundle();
-                bundle.putInt("userId",this.user.getId());
+                bundle.putInt("userId", this.user.getId());
                 fragment.setArguments(bundle);
                 title = getResources().getString(R.string.my_activities);
                 break;
@@ -269,18 +278,25 @@ public class MainActivity extends AppCompatActivity
         fragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_frame, fragment);
+        titleHistory.push(title);
         ft.addToBackStack(null);
         ft.commit();
     }
 
     @Override
     public void onListFragmentInteraction(Building building) {
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(building.getName());
+        }
+
         Fragment fragment = new ActivityFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("buildingId", building.getId());
         fragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_frame, fragment);
+        titleHistory.push(title);
         ft.addToBackStack(null);
         ft.commit();
     }

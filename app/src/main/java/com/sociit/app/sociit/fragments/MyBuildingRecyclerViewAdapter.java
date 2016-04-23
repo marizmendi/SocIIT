@@ -1,6 +1,7 @@
 package com.sociit.app.sociit.fragments;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,7 @@ public class MyBuildingRecyclerViewAdapter extends RecyclerView.Adapter<MyBuildi
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).getName());
-        holder.mContentView.setText(mValues.get(position).getAddress().toString());
+        holder.mContentView.setText(mValues.get(position).getActivityList().size()+"");
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
