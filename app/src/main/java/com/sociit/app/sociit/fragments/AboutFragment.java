@@ -70,7 +70,7 @@ public class AboutFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
         aboutText = (TextView) view.findViewById(R.id.aboutText);
         aboutText.setText("SocIIT lets the user find any other user within the university " +
-                            "area with interest to do the same activity. This will allow a " +
+                            "area with interest to do the same activity. This allows a " +
                             "fast event creation within the community as well as information " +
                             "about the university's scheduled events. " +
                             "\n Created by:" +
