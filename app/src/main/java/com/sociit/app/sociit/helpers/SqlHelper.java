@@ -184,12 +184,22 @@ public class SqlHelper extends SQLiteOpenHelper {
         Address vanderCook_address = new Address(Locale.getDefault());
         vanderCook_address.setLatitude(41.8363401);
         vanderCook_address.setLongitude(-87.6284961);
-        Building vanderCook = new Building(7, keating_address, "VanderCook College of Music", null);
+        Building vanderCook = new Building(7, vanderCook_address, "VanderCook College of Music", null);
 
         Address iitTower_address = new Address(Locale.getDefault());
         iitTower_address.setLatitude(41.8313864);
         iitTower_address.setLongitude(-87.6278956);
         Building iitTower = new Building(8, keating_address, "IIT Tower", null);
+
+        Address lifeSciences_address = new Address(Locale.getDefault());
+        lifeSciences_address.setLatitude(41.8365884);
+        lifeSciences_address.setLongitude(-87.6292395);
+        Building lifeSciencies = new Building(9, lifeSciences_address, "Life Sciences Building", null);
+
+        Address perlstein_address = new Address(Locale.getDefault());
+        perlstein_address.setLatitude(41.834588);
+        perlstein_address.setLongitude(-87.6271206);
+        Building perlstein = new Building(10, perlstein_address, "Perlstein Hall", null);
 
         this.addBuilding(mtcc, db);
         this.addBuilding(stuart, db);
@@ -199,6 +209,8 @@ public class SqlHelper extends SQLiteOpenHelper {
         this.addBuilding(keating, db);
         this.addBuilding(vanderCook, db);
         this.addBuilding(iitTower, db);
+        this.addBuilding(lifeSciencies, db);
+        this.addBuilding(perlstein, db);
 
         SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy");
         Date date = new Date();
