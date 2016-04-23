@@ -7,8 +7,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.sociit.app.sociit.R;
+import com.sociit.app.sociit.entities.Activity;
+import com.sociit.app.sociit.helpers.SqlHelper;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,7 +20,6 @@ import com.sociit.app.sociit.R;
  * to handle interaction events.
  * Use the {@link ActivityDetailsFragment#newInstance} factory method to
  * create an instance of this fragment.
- *
  */
 public class ActivityDetailsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -30,6 +32,10 @@ public class ActivityDetailsFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    public ActivityDetailsFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -48,9 +54,6 @@ public class ActivityDetailsFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-    public ActivityDetailsFragment() {
-        // Required empty public constructor
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,7 +68,18 @@ public class ActivityDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_activity_details, container, false);
+        View v = inflater.inflate(R.layout.fragment_activity_details, container, false);
+        setupDetails(v);
+        return v;
+    }
+
+    public void setupDetails(View v) {
+        TextView tv = (TextView) v.findViewById(R.id.activityId);
+        SqlHelper db = new SqlHelper(getActivity().getApplicationContext());
+        int activityId = this.getArguments().getInt("activityId");
+        Activity activity = db.getActivityById(activityId);
+        String activityCreator = activity.getCreator() == null ? "NULL" : activity.getCreator().getName();
+        tv.setText(activity.getName() + ". Creador: " + activityCreator);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -97,7 +111,7 @@ public class ActivityDetailsFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.

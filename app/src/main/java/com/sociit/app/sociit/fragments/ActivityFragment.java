@@ -71,11 +71,17 @@ public class ActivityFragment extends Fragment {
             }
             // call db to list activities
             SqlHelper db = new SqlHelper(getActivity().getApplicationContext());
-            if(this.getArguments() == null){
+            if (this.getArguments() == null) {
                 recyclerView.setAdapter(new MyActivityRecyclerViewAdapter(db.getAllActivities(), mListener));
             } else {
                 int userId = this.getArguments().getInt("userId");
-                recyclerView.setAdapter(new MyActivityRecyclerViewAdapter(db.getActivitiesByUserId(userId), mListener));
+                int buildingId = this.getArguments().getInt("buildingId");
+
+                if (userId != 0) {
+                    recyclerView.setAdapter(new MyActivityRecyclerViewAdapter(db.getActivitiesByUserId(userId), mListener));
+                } else if (buildingId != 0) {
+                    recyclerView.setAdapter(new MyActivityRecyclerViewAdapter(db.getActivitiesByBuildingId(buildingId), mListener));
+                }
             }
         }
         return view;

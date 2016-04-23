@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.sociit.app.sociit.MyApplication;
 import com.sociit.app.sociit.R;
 import com.sociit.app.sociit.entities.User;
 import com.sociit.app.sociit.helpers.SqlHelper;
@@ -67,6 +68,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //TODO: session remember?
+        boolean session = false; //((MyApplication) getApplication()).getSession() != null;
+
+        if (session) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra("mUsername", ((MyApplication) getApplication()).getSession().getUser().getUsername());
+            startActivity(intent);
+            finish();
+        }
+
         setContentView(R.layout.activity_login);
 
         db = new SqlHelper(getApplicationContext());
@@ -107,7 +119,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
     }
 
-    public void goToRegisterActivity(){
+    public void goToRegisterActivity() {
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
     }
@@ -222,7 +234,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length()>4;
+        return password.length() > 4;
     }
 
     /**
@@ -348,11 +360,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
 
-
-            return mPassword.equals(user.getPassword());
-
-            // TODO: register the new account here.
-            //return true;
+            if (mPassword.equals(user.getPassword())) {
+                ((MyApplication) getApplication()).setSession(new Session(user));
+                return true;
+            } else {
+                return false;
+            }
         }
 
         @Override
@@ -376,7 +389,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     mPasswordView.requestFocus();
                 }
             }
-            userNotFound=false;
+            userNotFound = false;
         }
 
         @Override

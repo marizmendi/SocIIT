@@ -29,7 +29,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     private static final String LOG = "SqlHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 21;
+    private static final int DATABASE_VERSION = 22;
     // Database Name
     private static final String DATABASE_NAME = "SociitDB";
 
@@ -179,15 +179,19 @@ public class SqlHelper extends SQLiteOpenHelper {
 
         mtcc = this.getBuildingByName("mtcc", db);
 
-        Activity activity = new Activity(0, "Actividad1", mtcc, date, null, null);
+        List<User> barList = new ArrayList<>();
+        User bar = this.getUserByUsername("bar", db);
+        barList.add(bar);
+
+        Activity activity = new Activity(0, "Actividad1", mtcc, date, barList, null);
         this.addActivity(activity, db);
 
 
-        List<User> userList = new ArrayList<>();
+        List<User> fooList = new ArrayList<>();
         User foo = this.getUserByUsername("foo", db);
-        userList.add(foo);
+        fooList.add(foo);
 
-        Activity activityFoo = new Activity(0, "ActividadFoo", mtcc, date, userList, null);
+        Activity activityFoo = new Activity(0, "ActividadFoo", mtcc, date, fooList, null);
         this.addActivity(activityFoo, db);
 
     }
@@ -246,7 +250,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         return returnUser;
     }
 
-    public User geUserById(int userId) {
+    public User getUserById(int userId) {
         SQLiteDatabase db = this.getWritableDatabase();
         User user = getUserById(userId, db);
         db.close();
@@ -367,7 +371,9 @@ public class SqlHelper extends SQLiteOpenHelper {
                     e.printStackTrace();
                 }
                 activity.setDate(activityDate);
-                // Add book to books
+
+                activity.setUserList(this.getActivityUsers(activity, db));
+
                 activities.add(activity);
             } while (cursor.moveToNext());
         }
@@ -383,6 +389,25 @@ public class SqlHelper extends SQLiteOpenHelper {
         }
 
         return returnActivity;
+
+    }
+
+    public List<User> getActivityUsers(Activity activity, SQLiteDatabase db) {
+        List<User> users = new LinkedList<>();
+
+        String query = "SELECT * FROM " + TABLE_USER_ACTIVITY + " WHERE " + KEY_USER_ACTIVITY_ACTIVITY + " LIKE \"" + activity.getId() + "\"";
+
+        Cursor cursor = db.rawQuery(query, null);
+        User user = null;
+
+        if (cursor.moveToFirst()) {
+            do {
+                user = getUserById(cursor.getInt(cursor.getColumnIndex(KEY_USER_ACTIVITY_USER)));
+                users.add(user);
+            } while (cursor.moveToNext());
+        }
+
+        return users;
 
     }
 
@@ -460,7 +485,7 @@ public class SqlHelper extends SQLiteOpenHelper {
             do {
                 int columnIndex = cursor.getColumnIndex(KEY_USER_ACTIVITY_ACTIVITY);
 
-                Log.d("columnIndex", columnIndex+"");
+                Log.d("columnIndex", columnIndex + "");
                 Log.d("activityId", cursor.getString(columnIndex));
 
                 activity = this.getActivityById(Integer.parseInt(cursor.getString(columnIndex)));
@@ -473,6 +498,45 @@ public class SqlHelper extends SQLiteOpenHelper {
         db.close();
 
         return activities; // return books
+    }
+
+    public List<Activity> getActivitiesByBuildingId(int buildingId, SQLiteDatabase db) {
+        List<Activity> activities = new LinkedList<Activity>();
+
+        // 1. build the query
+        String query = "SELECT  * FROM " + TABLE_ACTIVITY + " WHERE " + KEY_ACTIVITY_BUILDING + " LIKE \"" + buildingId + "\"";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        // 3. go over each row, build book and add it to list
+        Activity activity = null;
+        if (cursor.moveToFirst()) {
+            do {
+                activity = new Activity();
+                activity.setId(Integer.parseInt(cursor.getString(0)));
+                activity.setName(cursor.getString(1));
+                SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy");
+                Date activityDate = new Date();
+                try {
+                    activityDate = formatter.parse(cursor.getString(2));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                activity.setDate(activityDate);
+                // Add book to books
+                activities.add(activity);
+            } while (cursor.moveToNext());
+        }
+
+
+        return activities; // return books
+    }
+
+    public List<Activity> getActivitiesByBuildingId(int buildingId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        List<Activity> activities = this.getActivitiesByBuildingId(buildingId, db);
+        db.close();
+        return activities;
     }
 
     public List<Activity> getAllActivities() {

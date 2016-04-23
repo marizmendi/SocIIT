@@ -22,11 +22,13 @@ import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.widget.Toast;
 
+import com.sociit.app.sociit.MyApplication;
 import com.sociit.app.sociit.R;
 import com.sociit.app.sociit.entities.Activity;
 import com.sociit.app.sociit.entities.Building;
 import com.sociit.app.sociit.entities.User;
 import com.sociit.app.sociit.fragments.AboutFragment;
+import com.sociit.app.sociit.fragments.ActivityDetailsFragment;
 import com.sociit.app.sociit.fragments.ActivityFragment;
 import com.sociit.app.sociit.fragments.AddActivityFragment;
 import com.sociit.app.sociit.fragments.BuildingFragment;
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity
         BuildingFragment.OnListFragmentInteractionListener,
         NewsFragment.OnFragmentInteractionListener,
         HomeFragment.OnFragmentInteractionListener,
+        ActivityDetailsFragment.OnFragmentInteractionListener,
         AddActivityFragment.OnFragmentInteractionListener {
 
     private SqlHelper db;
@@ -179,6 +182,7 @@ public class MainActivity extends AppCompatActivity
             //startActivity(intent);
             return true;
         } else if (id == R.id.action_sign_out) {
+            ((MyApplication) getApplication()).setSession(null);
             // Redirect to MainActivity
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
@@ -238,7 +242,6 @@ public class MainActivity extends AppCompatActivity
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);
-            ft.addToBackStack(null);
             ft.commit();
         }
 
@@ -260,11 +263,25 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onListFragmentInteraction(Activity activity) {
-        Log.d("onListFragmentInteract", activity.getName());
+        Fragment fragment = new ActivityDetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("activityId", activity.getId());
+        fragment.setArguments(bundle);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame, fragment);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 
     @Override
     public void onListFragmentInteraction(Building building) {
-        Log.d("onListFragmentInteract", building.getName());
+        Fragment fragment = new ActivityFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("buildingId", building.getId());
+        fragment.setArguments(bundle);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame, fragment);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 }
