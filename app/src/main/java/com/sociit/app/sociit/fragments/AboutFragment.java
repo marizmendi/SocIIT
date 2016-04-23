@@ -72,7 +72,7 @@ public class AboutFragment extends Fragment {
         aboutText.setText("SocIIT lets the user find any other user within the university " +
                             "area with interest to do the same activity. This allows a " +
                             "fast event creation within the community as well as information " +
-                            "about the university's scheduled events. " +
+                            "about the university's scheduled events. \n" +
                             "\n Created by:" +
                             "\n Manuel Martinez" +
                             "\n Alejandro Nicolas"+
