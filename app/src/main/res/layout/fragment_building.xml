@@ -16,17 +16,50 @@
         card_view:cardElevation="2sp"
         card_view:cardUseCompatPadding="true">
 
-        <TextView
-            android:id="@+id/id"
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="20dp"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="20dp"
             android:layout_height="match_parent"
-            android:gravity="left|bottom"/>
+            android:layout_width="match_parent">
 
-        <TextView
-            android:id="@+id/content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="bottom|right"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/buildingImage"
+                android:src="@drawable/mtcc"
+                android:scaleType="centerCrop"
+                android:cropToPadding="true"
+                android:layout_gravity="top|left|right"
+                android:layout_above="@+id/id"
+                android:paddingBottom="@dimen/design_navigation_padding_bottom"/>
+
+            <TextView
+                android:id="@+id/id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|bottom"
+                android:text="Building"
+                android:layout_gravity="left|bottom"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
+
+            <TextView
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom|right"
+                android:text="0"
+                android:layout_gravity="bottom|right"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"/>
+
+        </RelativeLayout>
+
+
     </android.support.v7.widget.CardView>
 
 </LinearLayout>
