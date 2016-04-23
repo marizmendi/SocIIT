@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sociit.app.sociit.R;
@@ -36,11 +37,31 @@ public class MyBuildingRecyclerViewAdapter extends RecyclerView.Adapter<MyBuildi
         return new ViewHolder(view);
     }
 
+    public int getBuildingImageId(Building building){
+        int id;
+        switch (building.getName()){
+            case "MTCC":
+                id = R.drawable.mtcc;
+                break;
+            case "Stuart Building":
+                id = R.drawable.stuart;
+                break;
+            case "Hermann Hall":
+                id = R.drawable.hermann;
+                break;
+            default:
+                id = R.drawable.iitlogo;
+                break;
+        }
+        return id;
+    }
+
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).getName());
         holder.mContentView.setText(mValues.get(position).getActivityList().size()+"");
+        holder.mImageView.setImageResource(getBuildingImageId(mValues.get(position)));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +84,7 @@ public class MyBuildingRecyclerViewAdapter extends RecyclerView.Adapter<MyBuildi
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
+        public final ImageView mImageView;
         public Building mItem;
 
         public ViewHolder(View view) {
@@ -70,6 +92,7 @@ public class MyBuildingRecyclerViewAdapter extends RecyclerView.Adapter<MyBuildi
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.id);
             mContentView = (TextView) view.findViewById(R.id.content);
+            mImageView = (ImageView) view.findViewById(R.id.buildingImage);
         }
 
         @Override
