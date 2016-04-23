@@ -30,7 +30,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     private static final String LOG = "SqlHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 22;
+    private static final int DATABASE_VERSION = 23;
     // Database Name
     private static final String DATABASE_NAME = "SociitDB";
 

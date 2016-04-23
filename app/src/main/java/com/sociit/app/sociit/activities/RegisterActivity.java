@@ -82,7 +82,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView2 = (EditText) findViewById(R.id.password2);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mPasswordView2.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
@@ -185,7 +185,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (!isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -209,6 +209,13 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             cancel = true;
         }
 
+        // Check for a valid name.
+        if (TextUtils.isEmpty(mName)) {
+            mNameView.setError(getString(R.string.error_field_required));
+            focusView = mNameView;
+            cancel = true;
+        }
+
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -221,6 +228,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             mAuthTask.execute((Void) null);
         }
     }
+
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
@@ -236,7 +244,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return true; //password.length() > 4;
+        return password.length() > 4;
     }
 
     /**
@@ -349,7 +357,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 return false;
             }
@@ -362,10 +370,9 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                 db.addUser(new User(0, username, mName, mPassword, null));
                 newUser = true;
                 return true;
+            } else {
+                return false;
             }
-
-
-            return mPassword.equals(user.getPassword());
 
             // TODO: register the new account here.
             //return true;
@@ -391,8 +398,8 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                 startActivity(intent);
                 finish();
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                mEmailView.setError(getString(R.string.email_exists));
+                mEmailView.requestFocus();
             }
         }
 
