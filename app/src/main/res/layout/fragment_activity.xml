@@ -64,7 +64,7 @@
                 android:layout_alignParentEnd="true"/>
 
             <TextView
-                android:id="@+id/content"
+                android:id="@+id/date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="bottom|right"

@@ -4,10 +4,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sociit.app.sociit.R;
 import com.sociit.app.sociit.entities.Activity;
+import com.sociit.app.sociit.entities.Building;
 import com.sociit.app.sociit.fragments.ActivityFragment.OnListFragmentInteractionListener;
 import com.sociit.app.sociit.fragments.dummy.DummyContent.DummyItem;
 
@@ -35,11 +37,33 @@ public class MyActivityRecyclerViewAdapter extends RecyclerView.Adapter<MyActivi
         return new ViewHolder(view);
     }
 
+    public int getBuildingImageId(Building building){
+        int id;
+        switch (building.getName()){
+            case "MTCC":
+                id = R.drawable.mtcc;
+                break;
+            case "Stuart Building":
+                id = R.drawable.stuart;
+                break;
+            case "Hermann Hall":
+                id = R.drawable.hermann;
+                break;
+            default:
+                id = R.drawable.iitlogo;
+                break;
+        }
+        return id;
+    }
+
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).getId()+"");
-        holder.mContentView.setText(mValues.get(position).getName());
+        holder.mActivityName.setText(mValues.get(position).getName());
+        holder.mParticipantsNumber.setText(mValues.get(position).getNumberUsers());
+        holder.mBuilding.setText(mValues.get(position).getBuilding().getName());
+        holder.mDate.setText(mValues.get(position).getDate().toString());
+        holder.mImageView.setImageResource(getBuildingImageId(mValues.get(position).getBuilding()));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,20 +84,21 @@ public class MyActivityRecyclerViewAdapter extends RecyclerView.Adapter<MyActivi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
+        public final TextView mActivityName;
+        public final TextView mParticipantsNumber;
+        public final TextView mBuilding;
+        public final TextView mDate;
+        public final ImageView mImageView;
         public Activity mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            mActivityName = (TextView) view.findViewById(R.id.activityName);
+            mParticipantsNumber = (TextView) view.findViewById(R.id.participantsNumber);
+            mBuilding = (TextView) view.findViewById(R.id.building);
+            mDate = (TextView) view.findViewById(R.id.date);
+            mImageView = (ImageView) view.findViewById(R.id.buildingImage);
         }
     }
 }

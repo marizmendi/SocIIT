@@ -86,4 +86,8 @@ public class Activity {
     public void addComment(Comment comment) {
         this.commentList.add(comment);
     }
+
+    public int getNumberUsers (){
+        return userList.size();
+    }
 }
