@@ -7,7 +7,7 @@
             android:paddingLeft="20dp"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="20dp"
-            android:layout_height="150dp"
+            android:layout_height="208dp"
             android:layout_width="match_parent">
 
             <TextView
@@ -30,12 +30,12 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:id="@+id/buildingImage"
                 android:scaleType="centerCrop"
                 android:cropToPadding="true"
                 android:layout_gravity="center|left"
-                android:layout_alignParentTop="true" />
+                android:layout_below="@+id/activityName" />
 
             <TextView
                 android:id="@+id/building"
@@ -43,11 +43,11 @@
                 android:layout_height="wrap_content"
                 android:gravity="left|bottom"
                 android:text="Building"
-                android:layout_below="@id/buildingImage"
                 android:layout_gravity="left|bottom"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"/>
+                android:layout_alignParentEnd="true"
+                android:textColor="#ffffff" />
 
             <TextView
                 android:id="@+id/date"
@@ -55,10 +55,11 @@
                 android:layout_height="wrap_content"
                 android:gravity="bottom|right"
                 android:text="Date"
-                android:layout_below="@id/buildingImage"
                 android:layout_gravity="bottom|right"
                 android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"/>
+                android:layout_centerHorizontal="true"
+                android:layout_alignTop="@+id/building"
+                android:textColor="#ffffff" />
 
         </RelativeLayout>
 
