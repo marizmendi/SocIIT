@@ -66,7 +66,21 @@ public class AddActivityFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_add_activity, container, false);
         List<String> buildingsArray = new ArrayList<String>();
+        buildingsArray.add("Select a place for the activity...");
         buildingsArray.add("MTCC");
         buildingsArray.add("Stuart Building");
         buildingsArray.add("Hermann Hall");
@@ -78,17 +92,14 @@ public class AddActivityFragment extends DialogFragment {
         buildingsArray.add("Life Sciences Building");
         buildingsArray.add("Perlstein Hall");
         buildingsArray.add("Wishnick Hall");
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+        Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, buildingsArray);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_activity, container, false);
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
