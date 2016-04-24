@@ -1,27 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/tools"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_gravity="center"
-        android:clipChildren="false"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardElevation="2sp"
-        card_view:cardUseCompatPadding="true">
-
         <RelativeLayout
-            android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="20dp"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="20dp"
-            android:layout_height="match_parent"
+            android:layout_height="150dp"
             android:layout_width="match_parent">
 
             <TextView
@@ -47,10 +33,9 @@
                 android:layout_height="fill_parent"
                 android:id="@+id/buildingImage"
                 android:scaleType="centerCrop"
-                android:layout_below="@id/activityName"
                 android:cropToPadding="true"
                 android:layout_gravity="center|left"
-                android:paddingBottom="@dimen/design_navigation_padding_bottom"/>
+                android:layout_alignParentTop="true" />
 
             <TextView
                 android:id="@+id/building"
@@ -58,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="left|bottom"
                 android:text="Building"
+                android:layout_below="@id/buildingImage"
                 android:layout_gravity="left|bottom"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
@@ -69,13 +55,11 @@
                 android:layout_height="wrap_content"
                 android:gravity="bottom|right"
                 android:text="Date"
+                android:layout_below="@id/buildingImage"
                 android:layout_gravity="bottom|right"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"/>
 
         </RelativeLayout>
-
-
-    </android.support.v7.widget.CardView>
 
 </LinearLayout>

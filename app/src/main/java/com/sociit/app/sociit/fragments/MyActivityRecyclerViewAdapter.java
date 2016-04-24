@@ -36,7 +36,7 @@ public class MyActivityRecyclerViewAdapter extends RecyclerView.Adapter<MyActivi
                 .inflate(R.layout.fragment_activity, parent, false);
         return new ViewHolder(view);
     }
-
+/**
     public int getBuildingImageId(Building building){
         int id;
         switch (building.getName()){
@@ -55,15 +55,15 @@ public class MyActivityRecyclerViewAdapter extends RecyclerView.Adapter<MyActivi
         }
         return id;
     }
-
+**/
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mActivityName.setText(mValues.get(position).getName());
         holder.mParticipantsNumber.setText(mValues.get(position).getNumberUsers()+"");
-        holder.mBuilding.setText(mValues.get(position).getBuilding().getName());
+        //holder.mBuilding.setText(mValues.get(position).getBuilding().getId());
         holder.mDate.setText(mValues.get(position).getDate().toString());
-        holder.mImageView.setImageResource(getBuildingImageId(mValues.get(position).getBuilding()));
+        holder.mImageView.setImageResource(R.drawable.mtcc);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
