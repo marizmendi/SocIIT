@@ -34,7 +34,10 @@
     <string name="action_sign_out">Sign out</string>
     <string name="email_exists">Email already registered</string>
 
+    <string name="social_network_preference">"Social Networks"</string>
 
+    <string name="twitter">"Twitter"</string>
+    <string name="twitter_message">"Click to sign in"</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

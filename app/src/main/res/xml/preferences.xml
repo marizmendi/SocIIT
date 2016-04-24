@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="pref_key_storage_settings"
+        android:title="@string/social_network_preference">
+        <Preference android:title="@string/twitter"
+                    android:key="@string/twitter"
+                    android:summary="@string/twitter_message"/>
+        <!--CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_key_auto_delete"
+            android:summary="@string/pref_summary_auto_delete"
+            android:title="@string/pref_title_auto_delete"/>
+        <Preference
+            android:dependency="pref_key_auto_delete"
+            android:key="pref_key_sms_delete_limit"
+            android:summary="@string/pref_summary_delete_limit"
+            android:title="@string/pref_title_sms_delete"/>
+        <Preference
+            android:dependency="pref_key_auto_delete"
+            android:key="pref_key_mms_delete_limit"
+            android:summary="@string/pref_summary_delete_limit"
+            android:title="@string/pref_title_mms_delete"/-->
+    </PreferenceCategory>
+</PreferenceScreen>

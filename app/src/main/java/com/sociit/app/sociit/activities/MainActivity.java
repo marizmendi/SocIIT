@@ -33,6 +33,7 @@ import com.sociit.app.sociit.fragments.AddActivityFragment;
 import com.sociit.app.sociit.fragments.BuildingFragment;
 import com.sociit.app.sociit.fragments.HomeFragment;
 import com.sociit.app.sociit.fragments.NewsFragment;
+import com.sociit.app.sociit.fragments.SettingsFragment;
 import com.sociit.app.sociit.helpers.SqlHelper;
 
 import java.util.Stack;
@@ -46,7 +47,8 @@ public class MainActivity extends AppCompatActivity
         NewsFragment.OnFragmentInteractionListener,
         HomeFragment.OnFragmentInteractionListener,
         ActivityDetailsFragment.OnFragmentInteractionListener,
-        AddActivityFragment.OnFragmentInteractionListener {
+        AddActivityFragment.OnFragmentInteractionListener,
+        SettingsFragment.OnFragmentInteractionListener{
 
     private SqlHelper db;
 
@@ -187,8 +189,16 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            //Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-            //startActivity(intent);
+            SettingsFragment fragment = new SettingsFragment();
+            title = getResources().getString(R.string.activities);
+            // set the toolbar title
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(title);
+            }
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, fragment);
+            ft.addToBackStack(null);
+            ft.commit();
             return true;
         } else if (id == R.id.action_sign_out) {
             ((MyApplication) getApplication()).setSession(null);
