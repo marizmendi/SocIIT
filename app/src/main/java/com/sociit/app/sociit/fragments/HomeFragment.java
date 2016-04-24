@@ -1,15 +1,17 @@
 package com.sociit.app.sociit.fragments;
-
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.app.AlertDialog;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -23,7 +25,6 @@ import com.sociit.app.sociit.entities.Building;
 import com.sociit.app.sociit.helpers.SqlHelper;
 
 import java.util.List;
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -37,21 +38,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     private OnFragmentInteractionListener mListener;
-
     private static GoogleMap mMap;
-
     private static View view;
-
+    private Marker clickedMarker = null;
     public HomeFragment() {
         // Required empty public constructor
     }
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -69,7 +65,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +73,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -94,7 +88,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         }
         return view;
     }
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -102,16 +95,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         SupportMapFragment mapFragment = ((SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map));
         mapFragment.getMapAsync(this);
-
     }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -122,13 +106,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
                     + " must implement OnFragmentInteractionListener");
         }
     }
-
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -141,51 +123,72 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         LatLngBounds IIT = new LatLngBounds(
                 new LatLng(41.83, -87.63), new LatLng(41.8411, -87.6235));
-
         // Set the camera to the greatest possible zoom level that includes the
         // bounds
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(IIT, 0));
-
         mMap.getUiSettings().setRotateGesturesEnabled(false);
         mMap.getUiSettings().setTiltGesturesEnabled(false);
-
         mMap.setOnMarkerClickListener(this);
-
         SqlHelper db = new SqlHelper(getActivity().getApplicationContext());
         List<Building> buildings = db.getAllBuildings();
-        for(int i = 0; i<buildings.size(); i++){
+        for (int i = 0; i < buildings.size(); i++) {
             Building building = buildings.get(i);
             LatLng buildingLatLong = new LatLng(building.getAddress().getLatitude(), building.getAddress().getLongitude());
             mMap.addMarker(new MarkerOptions()
                     .position(buildingLatLong)
                     .title(building.getName()));
         }
-
-
-
     }
-
     @Override
     public boolean onMarkerClick(Marker marker) {
-        return false;
+        clickedMarker = marker;
+        CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(marker.getPosition().latitude, marker.getPosition().longitude), mMap.getCameraPosition().zoom);
+        mMap.animateCamera(cu, 100,new GoogleMap.CancelableCallback() {
+            @Override
+            public void onFinish() {
+                showDialog();
+            }
+            @Override
+            public void onCancel() {
+                return;
+            }
+        });
+        return true;
+    }
+    public void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(clickedMarker.getTitle()).setPositiveButton("See activities", dialogClickListener)
+                .setNegativeButton("Cancel", dialogClickListener).show();
     }
 
-
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    //Yes button clicked
+                    mListener.onFragmentInteraction(clickedMarker);
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    //No button clicked
+                    break;
+            }
+        }
+    };
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Marker marker);
     }
 }
