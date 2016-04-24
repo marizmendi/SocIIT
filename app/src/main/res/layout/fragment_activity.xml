@@ -1,20 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal">
+    xmlns:app="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:clipChildren="false"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="2sp"
+        card_view:cardUseCompatPadding="true">
 
-    <TextView
-        android:id="@+id/content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+        <RelativeLayout
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="20dp"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="20dp"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+
+            <TextView
+                android:id="@+id/activityName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|top"
+                android:text="Activity name"
+                android:layout_gravity="left|top"
+                android:layout_alignParentRight="true" />
+
+            <TextView
+                android:id="@+id/participantsNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right|top"
+                android:text="1 Participant"
+                android:layout_gravity="right|top"
+                android:layout_alignParentRight="true" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/buildingImage"
+                android:scaleType="centerCrop"
+                android:layout_below="@id/activityName"
+                android:cropToPadding="true"
+                android:layout_gravity="center|left"
+                android:paddingBottom="@dimen/design_navigation_padding_bottom"/>
+
+            <TextView
+                android:id="@+id/building"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|bottom"
+                android:text="Building"
+                android:layout_gravity="left|bottom"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
+
+            <TextView
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom|right"
+                android:text="Date"
+                android:layout_gravity="bottom|right"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"/>
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+
 </LinearLayout>
