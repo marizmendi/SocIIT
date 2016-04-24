@@ -70,6 +70,12 @@
                 android:layout_gravity="center_horizontal"
                 android:background="@color/colorPrimary"
                 android:textColor="@android:color/white"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                />
+
         </LinearLayout>
     </ScrollView>
 
