@@ -60,7 +60,7 @@ public class MyActivityRecyclerViewAdapter extends RecyclerView.Adapter<MyActivi
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mActivityName.setText(mValues.get(position).getName());
-        holder.mParticipantsNumber.setText(mValues.get(position).getNumberUsers());
+        holder.mParticipantsNumber.setText(mValues.get(position).getNumberUsers()+"");
         holder.mBuilding.setText(mValues.get(position).getBuilding().getName());
         holder.mDate.setText(mValues.get(position).getDate().toString());
         holder.mImageView.setImageResource(getBuildingImageId(mValues.get(position).getBuilding()));

@@ -88,6 +88,7 @@ public class Activity {
     }
 
     public int getNumberUsers (){
-        return userList.size();
+        if (userList != null) return userList.size();
+        else return 0;
     }
 }
