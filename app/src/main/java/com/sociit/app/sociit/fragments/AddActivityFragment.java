@@ -75,8 +75,9 @@ public class AddActivityFragment extends DialogFragment {
         buildingsArray.add("Keating Sports Center");
         buildingsArray.add("VanderCook College of Music");
         buildingsArray.add("IIT Tower");
-        buildingsArray.add("IIT Tower");
-
+        buildingsArray.add("Life Sciences Building");
+        buildingsArray.add("Perlstein Hall");
+        buildingsArray.add("Wishnick Hall");
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
