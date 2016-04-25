@@ -3,8 +3,10 @@ package com.sociit.app.sociit.helpers;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.location.Address;
 
 import com.sociit.app.sociit.entities.Activity;
@@ -30,7 +32,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     private static final String LOG = "SqlHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 23;
+    private static final int DATABASE_VERSION = 25;
     // Database Name
     private static final String DATABASE_NAME = "SociitDB";
 
@@ -48,6 +50,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     private static final String KEY_ACTIVITY_NAME = "name";
     private static final String KEY_ACTIVITY_BUILDING = "building";
     private static final String KEY_ACTIVITY_DATE = "date";
+    private static final String KEY_ACTIVITY_DESCRIPTION = "description";
 
     // BUILDINGS Table - column names
     private static final String KEY_BUILDING_NAME = "name";
@@ -75,6 +78,7 @@ public class SqlHelper extends SQLiteOpenHelper {
                     KEY_ACTIVITY_NAME + " TEXT," +
                     KEY_ACTIVITY_DATE + " TEXT," +
                     KEY_ACTIVITY_BUILDING + " INTEGER, " +
+                    KEY_ACTIVITY_DESCRIPTION + " TEXT, " +
                     "FOREIGN KEY(" + KEY_ACTIVITY_BUILDING + ") REFERENCES buildings(" + KEY_ID + ")" +
                     ")";
 
@@ -232,7 +236,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         User bar = this.getUserByUsername("bar", db);
         barList.add(bar);
 
-        Activity activity = new Activity(0, "Actividad1", mtcc, date, barList, null);
+        Activity activity = new Activity(0, "Actividad1", mtcc, date, barList, null, "details1");
         this.addActivity(activity, db);
 
 
@@ -240,7 +244,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         User foo = this.getUserByUsername("foo", db);
         fooList.add(foo);
 
-        Activity activityFoo = new Activity(0, "ActividadFoo", mtcc, date, fooList, null);
+        Activity activityFoo = new Activity(0, "ActividadFoo", mtcc, date, fooList, null, "details1");
         this.addActivity(activityFoo, db);
 
     }
@@ -364,6 +368,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         values.put(KEY_ACTIVITY_NAME, activity.getName()); // get name
         values.put(KEY_ACTIVITY_BUILDING, activity.getBuilding().getId()); // get building
         values.put(KEY_ACTIVITY_DATE, activity.getDate().toString());
+        values.put(KEY_ACTIVITY_DESCRIPTION, activity.getDescription());
         //values.put(KEY_ACTIVITY_USER, activity.getUserList().get(0).getId());
 
         // 3. insert
@@ -568,8 +573,7 @@ public class SqlHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
-
-        return activities; // return books
+        return activities; // return activities
     }
 
     public List<Activity> getActivitiesByBuildingId(int buildingId) {
@@ -579,7 +583,16 @@ public class SqlHelper extends SQLiteOpenHelper {
         return activities;
     }
 
-    public List<Activity> getAllActivities() {
+    // NOT WORKING, WHY?
+    public long getNumberOfActivities(){
+    String query = "SELECT COUNT(*) FROM " + TABLE_ACTIVITY;
+    SQLiteDatabase db = this.getWritableDatabase();
+    SQLiteStatement statement = db.compileStatement(query);
+    long count = statement.simpleQueryForLong();
+    return count;
+    }
+
+        public List<Activity> getAllActivities() {
         List<Activity> activities = new LinkedList<Activity>();
 
         // 1. build the query
@@ -589,7 +602,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
-        // 3. go over each row, build book and add it to list
+        // 3. go over each row, build activity and add it to list
         Activity activity = null;
         if (cursor.moveToFirst()) {
             do {
@@ -611,7 +624,7 @@ public class SqlHelper extends SQLiteOpenHelper {
 
         db.close();
 
-        return activities; // return books
+        return activities; // return activities
     }
 
     public List<Activity> getUserActivities(User user) {

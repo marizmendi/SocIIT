@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SocIIT.iml" filepath="$PROJECT_DIR$/SocIIT.iml" />
-      <module fileurl="file://$PROJECT_DIR$/SocIIT Android.iml" filepath="$PROJECT_DIR$/SocIIT Android.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/sociit-android.iml" filepath="$PROJECT_DIR$/sociit-android.iml" />
     </modules>

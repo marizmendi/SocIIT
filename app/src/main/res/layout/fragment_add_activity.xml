@@ -40,7 +40,8 @@
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinner" />
+                android:id="@+id/spinner"
+                android:layout_margin="20dp" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -50,23 +51,47 @@
                 android:id="@+id/activityDescription"
                 android:hint="Activity description" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Day for the activity?"
+                android:id="@+id/textView3"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold"
+                android:textSize="20dp" />
+
             <DatePicker
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/datePicker"
                 android:spinnersShown="true"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Time for the activity?"
+                android:id="@+id/textView4"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold"
+                android:textSize="20dp" />
 
             <TimePicker
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/timePicker" />
+                android:id="@+id/timePicker"
+                android:timePickerMode="spinner"
+                android:layout_gravity="center_horizontal" />
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Create activity"
-                android:id="@+id/button"
+                android:id="@+id/createActivityButton"
                 android:layout_gravity="center_horizontal"
                 android:background="@color/colorPrimary"
                 android:textColor="@android:color/white"/>

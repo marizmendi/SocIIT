@@ -79,7 +79,7 @@ public class ActivityDetailsFragment extends Fragment {
         int activityId = this.getArguments().getInt("activityId");
         Activity activity = db.getActivityById(activityId);
         String activityCreator = activity.getCreator() == null ? "NULL" : activity.getCreator().getName();
-        tv.setText(activity.getName() + ". Creador: " + activityCreator);
+        tv.setText(activity.getName() + ". Creador: " + activityCreator + ". Description: " + activity.getDescription());
     }
 
     // TODO: Rename method, update argument and hook method into UI event
