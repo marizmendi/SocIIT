@@ -167,9 +167,13 @@ public class AddActivityFragment extends DialogFragment {
         }
 
         // Creation of the user list to add as activity parameter
-     /* List<User> barList = new ArrayList<>();
-        User bar = SqlHelper.getUserByUsername("bar");
-        barList.add(bar); */
+        final List<User> userList = new ArrayList<>();
+        User user = db.getUserByUsername(userId);
+        userList.add(user);
+
+       /* final List<Comment> commentList = new ArrayList<>();
+        Comment comment = new Comment(0, activityDescription.getText().toString(), user, null);
+        userList.add(user); */
 
         //Logic for create activity button
         Button createActivityButton = (Button) view.findViewById(R.id.createActivityButton);
@@ -178,7 +182,7 @@ public class AddActivityFragment extends DialogFragment {
                 if (verifyFields()){
                     Toast.makeText(getContext(), "TEST~ "+userId , Toast.LENGTH_SHORT).show();
                     //activity created with the parameters entered by the user
-                Activity activity = new Activity(db.getAllActivities().size()+1, activityName.getText().toString(), db.getBuildingByName(buildingId), datePickerDate, userId, null);
+                Activity activity = new Activity(0, activityName.getText().toString(), db.getBuildingByName(buildingId), datePickerDate, userList, null);
                     //activity added to the database
            //         db.addActivity(activity);
                 }
