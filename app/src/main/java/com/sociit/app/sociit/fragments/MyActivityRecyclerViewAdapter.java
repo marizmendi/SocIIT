@@ -36,6 +36,7 @@ public class MyActivityRecyclerViewAdapter extends RecyclerView.Adapter<MyActivi
                 .inflate(R.layout.fragment_activity, parent, false);
         return new ViewHolder(view);
     }
+
 /**
     public int getBuildingImageId(Building building){
         int id;

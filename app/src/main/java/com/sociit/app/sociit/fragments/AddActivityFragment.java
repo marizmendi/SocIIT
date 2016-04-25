@@ -10,6 +10,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,6 +128,8 @@ public class AddActivityFragment extends DialogFragment {
         buildingsArray.add("Perlstein Hall");
         buildingsArray.add("Wishnick Hall");
 
+        List<Building> buildingList = db.getAllBuildings();
+
         Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, buildingsArray);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -153,8 +156,8 @@ public class AddActivityFragment extends DialogFragment {
         activityDescription = (EditText) view.findViewById(R.id.activityDescription);
 
         //DatePicker and TimePicker initialization and parameters
-        DatePicker datePicker = (DatePicker) view.findViewById(R.id.datePicker);
-        final TimePicker timePicker = (TimePicker) view.findViewById(R.id.timePicker);
+        datePicker = (DatePicker) view.findViewById(R.id.datePicker);
+        timePicker = (TimePicker) view.findViewById(R.id.timePicker);
         int day = datePicker.getDayOfMonth();
         int month = datePicker.getMonth() + 1;
         int year = datePicker.getYear();
@@ -163,7 +166,8 @@ public class AddActivityFragment extends DialogFragment {
         SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy");
         datePickerDate = new Date();
         try {
-            datePickerDate = formatter.parse("DAY"+month+" "+day+" "+hour+" "+minute+" 00 EDT "+year);
+            Log.d("date:","DAY "+month+" "+day+" "+hour+" "+minute+" 00 EDT "+year);
+            datePickerDate = formatter.parse("DAY "+month+" "+day+" "+hour+" "+minute+" 00 EDT "+year);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -182,7 +186,7 @@ public class AddActivityFragment extends DialogFragment {
         createActivityButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if (verifyFields()){
-                    Toast.makeText(getContext(), "TEST~ "+userName , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Activity created" , Toast.LENGTH_SHORT).show();
                     //activity created with the parameters entered by the user
                 Activity activity = new Activity(0, activityName.getText().toString(), db.getBuildingByName(buildingId), datePickerDate, userList, null, activityDescription.getText().toString());
                     //activity added to the database

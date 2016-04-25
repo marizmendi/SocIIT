@@ -32,7 +32,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     private static final String LOG = "SqlHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 24;
+    private static final int DATABASE_VERSION = 25;
     // Database Name
     private static final String DATABASE_NAME = "SociitDB";
 
@@ -368,6 +368,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         values.put(KEY_ACTIVITY_NAME, activity.getName()); // get name
         values.put(KEY_ACTIVITY_BUILDING, activity.getBuilding().getId()); // get building
         values.put(KEY_ACTIVITY_DATE, activity.getDate().toString());
+        values.put(KEY_ACTIVITY_DESCRIPTION, activity.getDescription());
         //values.put(KEY_ACTIVITY_USER, activity.getUserList().get(0).getId());
 
         // 3. insert
