@@ -1,6 +1,7 @@
 package com.sociit.app.sociit.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
@@ -63,6 +64,7 @@ public class AddActivityFragment extends DialogFragment {
     private Date datePickerDate;
     List<User> userList = new ArrayList<>();
 
+    Intent i;
 
     SqlHelper db;
 
@@ -102,6 +104,9 @@ public class AddActivityFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        Bundle b = getArguments();
+        final String userId = b.getString("userId");
 
         View view = inflater.inflate(R.layout.fragment_add_activity, container, false);
 
@@ -156,29 +161,32 @@ public class AddActivityFragment extends DialogFragment {
         SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy");
         datePickerDate = new Date();
         try {
-            datePickerDate = formatter.parse("DAY"+month+" "+day+" "+hour+" "+timePicker.getCurrentMinute()+" 00 EDT "+year);
+            datePickerDate = formatter.parse("DAY"+month+" "+day+" "+hour+" "+minute+" 00 EDT "+year);
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        // Creation of the user list to add as activity parameter
+     /* List<User> barList = new ArrayList<>();
+        User bar = SqlHelper.getUserByUsername("bar");
+        barList.add(bar); */
 
         //Logic for create activity button
         Button createActivityButton = (Button) view.findViewById(R.id.createActivityButton);
         createActivityButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if (verifyFields()){
-                    Toast.makeText(getContext(), "TEST~ "+datePickerDate , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "TEST~ "+userId , Toast.LENGTH_SHORT).show();
                     //activity created with the parameters entered by the user
-   //IMPLEMENTAR ACTIVITY                 Activity activity = new Activity(db.getAllActivities().size()+1, activityName.getText(), db.getBuildingByName(buildingId), datePickerDate.parse(""), , null);
+                Activity activity = new Activity(db.getAllActivities().size()+1, activityName.getText().toString(), db.getBuildingByName(buildingId), datePickerDate, userId, null);
                     //activity added to the database
            //         db.addActivity(activity);
                 }
             }
         });
 
-
         return view;
     }
-
 
     //Method to verify that all fields are correctly filled
     public boolean verifyFields(){
@@ -200,7 +208,6 @@ public class AddActivityFragment extends DialogFragment {
 
         return validFields;
     }
-
 
 
     // TODO: Rename method, update argument and hook method into UI event

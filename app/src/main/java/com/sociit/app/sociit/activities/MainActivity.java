@@ -9,6 +9,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ListFragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -112,11 +113,16 @@ public class MainActivity extends AppCompatActivity
                 .start();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         AddActivityFragment addActivityFragment = new AddActivityFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("userId", this.user.getName());
+        addActivityFragment.setArguments(bundle);
+
         titleHistory.push(title);
         ft.replace(R.id.content_frame, addActivityFragment);
         ft.addToBackStack(null);
         ft.commit();
     }
+
     public void closeDialog() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         ViewCompat.animate(fab)
