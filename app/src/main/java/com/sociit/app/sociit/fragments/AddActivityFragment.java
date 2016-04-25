@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +64,7 @@ public class AddActivityFragment extends DialogFragment {
     private DatePicker datePicker;
     private TimePicker timePicker;
     private Date datePickerDate;
-    List<User> userList = new ArrayList<>();
+    private User user;
 
     Intent i;
 
@@ -106,7 +108,7 @@ public class AddActivityFragment extends DialogFragment {
                              Bundle savedInstanceState) {
 
         Bundle b = getArguments();
-        final String userId = b.getString("userId");
+        final String userName = b.getString("userName");
 
         View view = inflater.inflate(R.layout.fragment_add_activity, container, false);
 
@@ -168,7 +170,7 @@ public class AddActivityFragment extends DialogFragment {
 
         // Creation of the user list to add as activity parameter
         final List<User> userList = new ArrayList<>();
-        User user = db.getUserByUsername(userId);
+        user = db.getUserByUsername(userName);
         userList.add(user);
 
        /* final List<Comment> commentList = new ArrayList<>();
@@ -180,11 +182,21 @@ public class AddActivityFragment extends DialogFragment {
         createActivityButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if (verifyFields()){
-                    Toast.makeText(getContext(), "TEST~ "+userId , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "TEST~ "+userName , Toast.LENGTH_SHORT).show();
                     //activity created with the parameters entered by the user
                 Activity activity = new Activity(0, activityName.getText().toString(), db.getBuildingByName(buildingId), datePickerDate, userList, null);
                     //activity added to the database
-           //         db.addActivity(activity);
+                    db.addActivity(activity);
+
+                    Fragment fragment = new ActivityFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("userId", user.getId());
+                    fragment.setArguments(bundle);
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.content_frame, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
                 }
             }
         });

@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         AddActivityFragment addActivityFragment = new AddActivityFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("userId", this.user.getName());
+        bundle.putString("userName", this.user.getName());
         addActivityFragment.setArguments(bundle);
 
         titleHistory.push(title);
