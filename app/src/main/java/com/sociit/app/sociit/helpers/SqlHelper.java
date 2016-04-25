@@ -3,8 +3,10 @@ package com.sociit.app.sociit.helpers;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.location.Address;
 
 import com.sociit.app.sociit.entities.Activity;
@@ -30,7 +32,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     private static final String LOG = "SqlHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 23;
+    private static final int DATABASE_VERSION = 24;
     // Database Name
     private static final String DATABASE_NAME = "SociitDB";
 
@@ -568,8 +570,7 @@ public class SqlHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
-
-        return activities; // return books
+        return activities; // return activities
     }
 
     public List<Activity> getActivitiesByBuildingId(int buildingId) {
@@ -579,7 +580,16 @@ public class SqlHelper extends SQLiteOpenHelper {
         return activities;
     }
 
-    public List<Activity> getAllActivities() {
+    // NOT WORKING, WHY?
+    public long getNumberOfActivities(){
+    String query = "SELECT COUNT(*) FROM " + TABLE_ACTIVITY;
+    SQLiteDatabase db = this.getWritableDatabase();
+    SQLiteStatement statement = db.compileStatement(query);
+    long count = statement.simpleQueryForLong();
+    return count;
+    }
+
+        public List<Activity> getAllActivities() {
         List<Activity> activities = new LinkedList<Activity>();
 
         // 1. build the query
@@ -589,7 +599,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
-        // 3. go over each row, build book and add it to list
+        // 3. go over each row, build activity and add it to list
         Activity activity = null;
         if (cursor.moveToFirst()) {
             do {
@@ -611,7 +621,7 @@ public class SqlHelper extends SQLiteOpenHelper {
 
         db.close();
 
-        return activities; // return books
+        return activities; // return activities
     }
 
     public List<Activity> getUserActivities(User user) {
