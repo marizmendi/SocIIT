@@ -50,6 +50,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     private static final String KEY_ACTIVITY_NAME = "name";
     private static final String KEY_ACTIVITY_BUILDING = "building";
     private static final String KEY_ACTIVITY_DATE = "date";
+    private static final String KEY_ACTIVITY_DESCRIPTION = "description";
 
     // BUILDINGS Table - column names
     private static final String KEY_BUILDING_NAME = "name";
@@ -77,6 +78,7 @@ public class SqlHelper extends SQLiteOpenHelper {
                     KEY_ACTIVITY_NAME + " TEXT," +
                     KEY_ACTIVITY_DATE + " TEXT," +
                     KEY_ACTIVITY_BUILDING + " INTEGER, " +
+                    KEY_ACTIVITY_DESCRIPTION + " TEXT, " +
                     "FOREIGN KEY(" + KEY_ACTIVITY_BUILDING + ") REFERENCES buildings(" + KEY_ID + ")" +
                     ")";
 
@@ -234,7 +236,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         User bar = this.getUserByUsername("bar", db);
         barList.add(bar);
 
-        Activity activity = new Activity(0, "Actividad1", mtcc, date, barList, null);
+        Activity activity = new Activity(0, "Actividad1", mtcc, date, barList, null, "details1");
         this.addActivity(activity, db);
 
 
@@ -242,7 +244,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         User foo = this.getUserByUsername("foo", db);
         fooList.add(foo);
 
-        Activity activityFoo = new Activity(0, "ActividadFoo", mtcc, date, fooList, null);
+        Activity activityFoo = new Activity(0, "ActividadFoo", mtcc, date, fooList, null, "details1");
         this.addActivity(activityFoo, db);
 
     }

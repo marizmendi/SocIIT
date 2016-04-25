@@ -184,7 +184,7 @@ public class AddActivityFragment extends DialogFragment {
                 if (verifyFields()){
                     Toast.makeText(getContext(), "TEST~ "+userName , Toast.LENGTH_SHORT).show();
                     //activity created with the parameters entered by the user
-                Activity activity = new Activity(0, activityName.getText().toString(), db.getBuildingByName(buildingId), datePickerDate, userList, null);
+                Activity activity = new Activity(0, activityName.getText().toString(), db.getBuildingByName(buildingId), datePickerDate, userList, null, activityDescription.getText().toString());
                     //activity added to the database
                     db.addActivity(activity);
 
