@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             SettingsFragment fragment = new SettingsFragment();
-            title = getResources().getString(R.string.activities);
+            title = getResources().getString(R.string.action_settings);
             // set the toolbar title
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setTitle(title);
