@@ -341,6 +341,10 @@ public class SqlHelper extends SQLiteOpenHelper {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                int buildingIdColumn = cursor.getColumnIndex(KEY_ACTIVITY_BUILDING);
+                int buildingId = cursor.getInt(buildingIdColumn);
+                activity.setBuilding(this.getBuildingById(buildingId, db));
+                activity.setDescription(cursor.getString(cursor.getColumnIndex(KEY_ACTIVITY_DESCRIPTION)));
                 activity.setDate(activityDate);
                 activity.setUserList(this.getActivityUsers(activity, db));
                 activities.add(activity);
@@ -393,9 +397,11 @@ public class SqlHelper extends SQLiteOpenHelper {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                activity.setBuilding(this.getBuildingById(cursor.getInt(cursor.getColumnIndex("buildingId")), db));
+                int buildingIdColumn = cursor.getColumnIndex(KEY_ACTIVITY_BUILDING);
+                int buildingId = cursor.getInt(buildingIdColumn);
+                activity.setBuilding(this.getBuildingById(buildingId, db));
                 activity.setDate(activityDate);
-                // Add book to books
+                activity.setDescription(cursor.getString(cursor.getColumnIndex(KEY_ACTIVITY_DESCRIPTION)));
                 activities.add(activity);
             } while (cursor.moveToNext());
         }
