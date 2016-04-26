@@ -67,10 +67,10 @@ public class NewsFragment extends Fragment {
         }
     }
 
-    public View onCreateView(ViewGroup parent, int viewType) {
-        // Inflate the layout for this fragment
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_news, parent, false);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_building_list, container, false);
 
         try{
             RssReader rssReader = new RssReader("http://www.iit.edu/news/iittoday/?cat=3&feed=rss2");
@@ -83,6 +83,7 @@ public class NewsFragment extends Fragment {
             Items.setOnItemClickListener(new ListListener(rssReader.getItems(),getActivity()));  }catch (Exception e) {
             Log.e("SimpleRssReader", e.getMessage());
         }
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
