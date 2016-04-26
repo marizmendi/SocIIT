@@ -28,12 +28,12 @@ public class RssParseHandler extends DefaultHandler{
         rssItems = new ArrayList<RssItem>();
     }
 
-    public List<RssItem> getRssItems(){
+    public List<RssItem> getItems(){
         return rssItems;
     }
 
     @Override
-    public void startElement (String uri, String localName, String qName, Attributes attributes) throws SAXException {
+    public void startElement (String url, String localName, String qName, Attributes attributes) throws SAXException {
         if ("content-item".equals(qName)){
             currentItem = new RssItem();
         } else if ("title".equals(qName)){
@@ -44,7 +44,7 @@ public class RssParseHandler extends DefaultHandler{
     }
 
     @Override
-    public void endElement (String uri, String localName, String qName) throws SAXException {
+    public void endElement (String url, String localName, String qName) throws SAXException {
         if ("content-item".equals(qName)){
             rssItems.add(currentItem);
             currentItem = null;
