@@ -4,11 +4,17 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.sociit.app.sociit.R;
+import com.sociit.app.sociit.entities.RssItem;
+import com.sociit.app.sociit.helpers.ListListener;
+import com.sociit.app.sociit.helpers.RssReader;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,11 +67,22 @@ public class NewsFragment extends Fragment {
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(ViewGroup parent, int viewType) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_news, container, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.fragment_news, parent, false);
+
+        try{
+            RssReader rssReader = new RssReader("http://www.iit.edu/news/iittoday/?cat=3&feed=rss2");
+            ListView Items = (ListView)view.findViewById(R.id.listView);
+
+            ArrayAdapter<RssItem> adapter = new ArrayAdapter<RssItem>(getActivity(),android.R.layout.simple_list_item_1, rssReader.getItems());
+
+            Items.setAdapter(adapter);
+
+            Items.setOnItemClickListener(new ListListener(rssReader.getItems(),getActivity()));  }catch (Exception e) {
+            Log.e("SimpleRssReader", e.getMessage());
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
