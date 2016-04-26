@@ -35,6 +35,7 @@ import com.sociit.app.sociit.fragments.AddActivityFragment;
 import com.sociit.app.sociit.fragments.BuildingFragment;
 import com.sociit.app.sociit.fragments.HomeFragment;
 import com.sociit.app.sociit.fragments.NewsFragment;
+import com.sociit.app.sociit.fragments.RssFragment;
 import com.sociit.app.sociit.fragments.SettingsFragment;
 import com.sociit.app.sociit.helpers.SqlHelper;
 
@@ -280,4 +281,5 @@ public class MainActivity extends AppCompatActivity
         ft.addToBackStack(null);
         ft.commit();
     }
+
 }

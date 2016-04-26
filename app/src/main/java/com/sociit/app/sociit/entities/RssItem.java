@@ -4,22 +4,20 @@ package com.sociit.app.sociit.entities;
  * Created by Lazaro on 4/25/16.
  */
 public class RssItem {
-    private String title;
-    private String link;
 
-    public String getTitle(){
-        return title;
+    private final String title;
+    private final String link;
+
+    public RssItem(String title, String link) {
+        this.title = title;
+        this.link = link;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public String getTitle() {
+        return title;
     }
 
     public String getLink() {
         return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
     }
 }
