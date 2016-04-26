@@ -70,10 +70,10 @@ public class AboutFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
         aboutText = (TextView) view.findViewById(R.id.aboutText);
-        aboutText.setText("SocIIT lets the user find any other user within the university " +
-                            "area with interest to do the same activity. This allows a " +
-                            "fast event creation within the community as well as information " +
-                            "about the university's scheduled events. \n" +
+        aboutText.setText("SocIIT lets the user find any other user within the university" +
+                " area with the same interests and hobbies.\n" +
+                "\n" + "It allows for a fast event creator within the community as well as " +
+                "information about the university's scheduled events.\n" +
                             "\n Created by:" +
                             "\n Manuel Martinez" +
                             "\n Alejandro Nicolas"+

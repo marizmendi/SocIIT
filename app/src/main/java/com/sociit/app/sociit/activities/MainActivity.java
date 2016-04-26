@@ -35,6 +35,7 @@ import com.sociit.app.sociit.fragments.AddActivityFragment;
 import com.sociit.app.sociit.fragments.BuildingFragment;
 import com.sociit.app.sociit.fragments.HomeFragment;
 import com.sociit.app.sociit.fragments.NewsFragment;
+import com.sociit.app.sociit.fragments.RssFragment;
 import com.sociit.app.sociit.fragments.SettingsFragment;
 import com.sociit.app.sociit.helpers.SqlHelper;
 
@@ -160,7 +161,7 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             SettingsFragment fragment = new SettingsFragment();
-            title = getResources().getString(R.string.activities);
+            title = getResources().getString(R.string.action_settings);
             // set the toolbar title
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setTitle(title);
@@ -280,4 +281,5 @@ public class MainActivity extends AppCompatActivity
         ft.addToBackStack(null);
         ft.commit();
     }
+
 }
