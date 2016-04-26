@@ -20,7 +20,6 @@ public class NewsFragment extends Fragment {
                 super.onCreate(savedInstanceState);
                 if (savedInstanceState == null) {
                         addRssFragment();
-                        Log.e("tag", "dentro1");
                 }
         }
 
@@ -28,7 +27,6 @@ public class NewsFragment extends Fragment {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
                 View view = inflater.inflate(R.layout.fragment_news, container, false);
-                Log.e("tag", "dentro2");
                 return view;
         }
 
@@ -38,7 +36,6 @@ public class NewsFragment extends Fragment {
                 RssFragment fragment = new RssFragment();
                 transaction.add(R.id.fragment_container, fragment);
                 transaction.commit();
-                Log.e("tag", "dentro3");
         }
 
         @Override
