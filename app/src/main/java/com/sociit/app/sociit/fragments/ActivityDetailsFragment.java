@@ -32,7 +32,7 @@ public class ActivityDetailsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    SqlHelper db = new SqlHelper(getActivity().getApplicationContext());
+//    SqlHelper db = new SqlHelper(getActivity().getApplicationContext());
 
     private OnFragmentInteractionListener mListener;
 
@@ -103,7 +103,7 @@ public class ActivityDetailsFragment extends Fragment {
         activityIdCreator.setText(activityCreator);
         activityIdDescription.setText(activity.getDescription());
         activityIdDateAndTime.setText(activity.getDate().toString());
-      //  activityIdPlace.setText(activity.getBuilding().getName());
+        activityIdPlace.setText(activity.getBuilding().getName());
       //  activityIdPeople.setText(activity.getNumberUsers());
 
     }
