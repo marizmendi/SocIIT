@@ -2,10 +2,13 @@ package com.sociit.app.sociit.fragments;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.sociit.app.sociit.R;
@@ -59,7 +62,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
         Preference button = findPreference(getString(R.string.twitter));
         button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override

@@ -49,6 +49,30 @@ public class MyBuildingRecyclerViewAdapter extends RecyclerView.Adapter<MyBuildi
             case "Hermann Hall":
                 id = R.drawable.hermann;
                 break;
+            case "S. R. Crown Hall":
+                id = R.drawable.srcrownhall;
+                break;
+            case "Paul V Galvin Library":
+                id = R.drawable.paulvgalvin;
+                break;
+            case "Keating Sports Center":
+                id = R.drawable.keating;
+                break;
+            case "VanderCook College of Music":
+                id = R.drawable.vandercook;
+                break;
+            case "IIT Tower":
+                id = R.drawable.tower;
+                break;
+            case "Life Sciences Building":
+                id = R.drawable.lifescience;
+                break;
+            case "Perlstein Hall":
+                id = R.drawable.perlstein;
+                break;
+            case "Wishnick Hall":
+                id = R.drawable.wishnick;
+                break;
             default:
                 id = R.drawable.iitlogo;
                 break;
