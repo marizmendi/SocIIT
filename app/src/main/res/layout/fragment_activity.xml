@@ -14,7 +14,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/holo_red_light"
+                android:background="@color/colorPrimary"
                 android:layout_alignParentTop="true"
                 android:layout_alignLeft="@+id/date"
                 android:layout_alignStart="@+id/date"
@@ -58,10 +58,12 @@
                 android:gravity="left|bottom"
                 android:text="Building"
                 android:layout_gravity="left|bottom"
-                android:layout_alignParentBottom="true"
+                android:textColor="#ffffff"
+                android:background="@color/colorPrimaryAlpha"
+                android:layout_above="@+id/date"
+                android:paddingLeft="2dp"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:textColor="#ffffff" />
+                android:layout_alignParentEnd="true"/>
 
             <TextView
                 android:id="@+id/date"
@@ -70,10 +72,12 @@
                 android:gravity="bottom|right"
                 android:text="Date"
                 android:layout_gravity="bottom|right"
+                android:textColor="#ffffff"
                 android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_alignTop="@+id/building"
-                android:textColor="#ffffff" />
+                android:layout_alignLeft="@+id/building"
+                android:layout_alignStart="@+id/building"
+                android:background="@color/colorPrimaryAlpha"
+                />
 
         </RelativeLayout>
 

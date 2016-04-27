@@ -117,13 +117,11 @@ public class MainActivity extends AppCompatActivity
         Bundle bundle = new Bundle();
         bundle.putString("userName", this.user.getName());
         addActivityFragment.setArguments(bundle);
-
         titleHistory.push(title);
         ft.replace(R.id.content_frame, addActivityFragment);
         ft.addToBackStack(null);
         ft.commit();
     }
-
     public void closeDialog() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         ViewCompat.animate(fab)
@@ -185,6 +183,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         closeDialog();
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.show();
         // Handle navigation view item clicks here.
         displayView(item.getItemId());
         return true;
@@ -237,10 +237,26 @@ public class MainActivity extends AppCompatActivity
     public void onFragmentInteraction(Uri uri) {
     }
     @Override
+    public void onFragmentInteraction(int userId) {
+        dialog_open = false;
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        ViewCompat.animate(fab)
+                .rotation(0)
+                .setDuration(500)
+                .setInterpolator(new BounceInterpolator())
+                .start();
+        Fragment fragment = new ActivityFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("userId", user.getId());
+        fragment.setArguments(bundle);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, fragment);
+        fragmentTransaction.commit();
+    }
+    @Override
     public void onFragmentInteraction(Marker marker) {
-
         Building building = db.getBuildingByName(marker.getTitle());
-
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(building.getName());
         }
@@ -281,5 +297,4 @@ public class MainActivity extends AppCompatActivity
         ft.addToBackStack(null);
         ft.commit();
     }
-
 }

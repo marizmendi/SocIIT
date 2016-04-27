@@ -9,11 +9,15 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.BounceInterpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -35,6 +39,7 @@ import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 /**
@@ -101,21 +106,15 @@ public class AddActivityFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_add_activity, container, false);
         //Spinner list and creation
         List<String> buildingsArray = new ArrayList<String>();
-        buildingsArray.add("Select a place for the activity...");
-        buildingsArray.add("MTCC");
-        buildingsArray.add("Stuart Building");
-        buildingsArray.add("Hermann Hall");
-        buildingsArray.add("S. R. Crown Hall");
-        buildingsArray.add("Paul V Galvin Library");
-        buildingsArray.add("Keating Sports Center");
-        buildingsArray.add("VanderCook College of Music");
-        buildingsArray.add("IIT Tower");
-        buildingsArray.add("Life Sciences Building");
-        buildingsArray.add("Perlstein Hall");
-        buildingsArray.add("Wishnick Hall");
         List<Building> buildingList = db.getAllBuildings();
+
+        buildingsArray.add("Select a place for the activity...");
+        for(int i = 0; i<buildingList.size();i++){
+            buildingsArray.add(buildingList.get(i).getName());
+        }
+
         Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, buildingsArray);
+        final ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, buildingsArray);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -136,23 +135,7 @@ public class AddActivityFragment extends DialogFragment {
         //DatePicker and TimePicker initialization and parameters
         datePicker = (DatePicker) view.findViewById(R.id.datePicker);
         timePicker = (TimePicker) view.findViewById(R.id.timePicker);
-        int day = datePicker.getDayOfMonth();
-        int month = datePicker.getMonth() + 1;
-        int year = datePicker.getYear();
-        int hour = timePicker.getCurrentHour();
-        int minute = timePicker.getCurrentMinute();
-        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy");
-        datePickerDate = new Date();
-        try {
-            Log.d("date:", "DAY " + month + " " + day + " " + hour + " " + minute + " 00 EDT " + year);
-            datePickerDate = formatter.parse("DAY " + month + " " + day + " " + hour + " " + minute + " 00 EDT " + year);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
         // Creation of the user list to add as activity parameter
-        final List<User> userList = new ArrayList<>();
-        user = db.getUserByUsername(userName);
-        userList.add(user);
 
        /* final List<Comment> commentList = new ArrayList<>();
         Comment comment = new Comment(0, activityDescription.getText().toString(), user, null);
@@ -162,26 +145,44 @@ public class AddActivityFragment extends DialogFragment {
         createActivityButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if (verifyFields()) {
+                    datePickerDate = getDateFromDateAndTimePicket(datePicker,timePicker);
+                    final List<User> userList = new ArrayList<>();
+                    user = db.getUserByUsername(userName);
+                    userList.add(user);
                     Toast.makeText(getContext(), "Activity created", Toast.LENGTH_SHORT).show();
                     //activity created with the parameters entered by the user
                     Activity activity = new Activity(0, activityName.getText().toString(), db.getBuildingByName(buildingId), datePickerDate, userList, null, activityDescription.getText().toString());
                     //activity added to the database
                     db.addActivity(activity);
-                    Fragment fragment = new ActivityFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("userId", user.getId());
-                    fragment.setArguments(bundle);
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.content_frame, fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
 
+                    mListener.onFragmentInteraction(user.getId());
                 }
             }
         });
+
+
         return view;
     }
+
+    /**
+     *From http://stackoverflow.com/questions/2592499/casting-and-getting-values-from-date-picker-and-time-picker-in-android/14590203#14590203
+     * @param datePicker
+     * @return a java.util.Date
+     */
+    public static java.util.Date getDateFromDateAndTimePicket(DatePicker datePicker, TimePicker timePicker){
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth();
+        int year =  datePicker.getYear();
+        int hour = timePicker.getCurrentHour();
+        int minute = timePicker.getCurrentMinute();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day, hour, minute, 0);
+
+        return calendar.getTime();
+    }
+
+
     //Method to verify that all fields are correctly filled
     public boolean verifyFields() {
         boolean validFields = true;
@@ -202,12 +203,7 @@ public class AddActivityFragment extends DialogFragment {
         }
         return validFields;
     }
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -235,6 +231,6 @@ public class AddActivityFragment extends DialogFragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(int userId);
     }
 }
