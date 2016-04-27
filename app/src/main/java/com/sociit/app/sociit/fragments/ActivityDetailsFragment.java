@@ -11,8 +11,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sociit.app.sociit.MyApplication;
 import com.sociit.app.sociit.R;
 import com.sociit.app.sociit.entities.Activity;
+import com.sociit.app.sociit.entities.User;
 import com.sociit.app.sociit.helpers.SqlHelper;
 
 /**
@@ -28,13 +30,13 @@ public class ActivityDetailsFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    private SqlHelper db;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-//    SqlHelper db = new SqlHelper(getActivity().getApplicationContext());
-
+    private Activity activity;
     private OnFragmentInteractionListener mListener;
+    boolean userExists = false;
 
     public ActivityDetailsFragment() {
         // Required empty public constructor
@@ -78,6 +80,7 @@ public class ActivityDetailsFragment extends Fragment {
     }
 
     public void setupDetails(View v) {
+        db = new SqlHelper(getActivity().getApplicationContext());
         TextView activityIdName = (TextView) v.findViewById(R.id.activityIdName);
         TextView activityIdCreator = (TextView) v.findViewById(R.id.activityIdCreator);
         TextView activityIdDescription = (TextView) v.findViewById(R.id.activityIdDescription);
@@ -86,26 +89,33 @@ public class ActivityDetailsFragment extends Fragment {
         TextView activityIdPeople = (TextView) v.findViewById(R.id.activityIdPeople);
         Button joinButton = (Button) v.findViewById(R.id.joinButton);
 
-        joinButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getContext(), "YO YO YO SUPPP" , Toast.LENGTH_SHORT).show();
-            //    db.linkUserActivity();
-                //***** IMPLEMENT USER ADDED TO THE ACTIVITY METHOD
-            }
-        });
-
-        SqlHelper db = new SqlHelper(getActivity().getApplicationContext());
         int activityId = this.getArguments().getInt("activityId");
-        Activity activity = db.getActivityById(activityId);
-        String activityCreator = activity.getCreator() == null ? "NULL" : activity.getCreator().getName();
+        activity = db.getActivityById(activityId);
+        final String activityCreator = activity.getCreator() == null ? "NULL" : activity.getCreator().getName();
         activityIdName.setText(activity.getName());
         activityIdCreator.setText(activityCreator);
         activityIdDescription.setText(activity.getDescription());
         activityIdDateAndTime.setText(activity.getDate().toString());
         activityIdPlace.setText(activity.getBuilding().getName());
-      //  activityIdPeople.setText(activity.getNumberUsers());
+        activityIdPeople.setText(""+activity.getNumberUsers());
 
+        joinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                User user = ((MyApplication) getActivity().getApplication()).getSession().getUser();
+                for(int i=0; i<db.getActivityUsers(activity).size();i++){
+                        if(db.getActivityUsers(activity).get(i).getName().equals(user.getName())){
+                            userExists = true;
+                        }
+                }
+                if(!userExists) {
+                  db.linkUserActivity(user, activity);
+                  Toast.makeText(getContext(), "You have successfully joined the event", Toast.LENGTH_SHORT).show();
+              }
+                else Toast.makeText(getContext(), "You are already in this activity", Toast.LENGTH_SHORT).show();
+            userExists = false;
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event

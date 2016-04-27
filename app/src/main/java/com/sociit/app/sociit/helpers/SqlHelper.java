@@ -358,6 +358,14 @@ public class SqlHelper extends SQLiteOpenHelper {
         }
         return returnActivity;
     }
+
+    public List<User> getActivityUsers(Activity activity) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        List<User> users = getActivityUsers(activity, db);
+        db.close();
+        return users;
+    }
+
     public List<User> getActivityUsers(Activity activity, SQLiteDatabase db) {
         List<User> users = new LinkedList<>();
         String query = "SELECT * FROM " + TABLE_USER_ACTIVITY + " WHERE " + KEY_USER_ACTIVITY_ACTIVITY + " LIKE \"" + activity.getId() + "\"";

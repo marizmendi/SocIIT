@@ -48,7 +48,8 @@
             android:layout_height="wrap_content"
             android:text="Description:"
             android:id="@+id/activityPlainDescription"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:layout_marginTop="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -63,7 +64,8 @@
             android:layout_height="wrap_content"
             android:text="Date and time:"
             android:id="@+id/activityPlainDateAndTime"
-            android:textSize="15dp" />
+            android:textSize="15dp"
+            android:layout_marginTop="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -78,7 +80,8 @@
             android:layout_height="wrap_content"
             android:text="Where?"
             android:id="@+id/activityPlainPlace"
-            android:textSize="15dp" />
+            android:textSize="15dp"
+            android:layout_marginTop="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -93,7 +96,8 @@
             android:layout_height="wrap_content"
             android:text="People attending"
             android:id="@+id/activityPlainPeople"
-            android:textSize="15dp" />
+            android:textSize="15dp"
+            android:layout_marginTop="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -104,12 +108,14 @@
             android:textStyle="bold"/>
 
         <Button
-            android:layout_width="145dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Join the activity!"
             android:id="@+id/joinButton"
             android:layout_gravity="center_horizontal"
-            android:background="@color/colorPrimary" />
+            android:background="@color/colorPrimary"
+            android:layout_margin="10dp"
+            android:textColor="#ffffff" />
     </LinearLayout>
 
 </FrameLayout>
