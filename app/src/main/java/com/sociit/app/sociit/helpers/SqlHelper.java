@@ -27,7 +27,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     // Logcat tag
     private static final String LOG = "SqlHelper";
     // Database Version
-    private static final int DATABASE_VERSION = 26;
+    private static final int DATABASE_VERSION = 30;
     // Database Name
     private static final String DATABASE_NAME = "SociitDB";
     // Table Names
@@ -125,9 +125,9 @@ public class SqlHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
     private void prepopulateDB(SQLiteDatabase db) {
-        User user1 = new User(0, "foo", "FOO", "hello", null);
+        User user1 = new User(0, "mmarti45", "Manuel Martinez", "hello", null);
         this.addUser(user1, db);
-        User user2 = new User(0, "bar", "BAR", "world", null);
+        User user2 = new User(0, "lsanchez7", "Lazaro Sanchez", "world", null);
         this.addUser(user2, db);
         //TODO: Fix latitudes and longitudes and add missing buildings
         Address mtcc_address = new Address(Locale.getDefault());
@@ -161,7 +161,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         Address iitTower_address = new Address(Locale.getDefault());
         iitTower_address.setLatitude(41.8313864);
         iitTower_address.setLongitude(-87.6278956);
-        Building iitTower = new Building(8, keating_address, "IIT Tower", null);
+        Building iitTower = new Building(8, iitTower_address, "IIT Tower", null);
         Address lifeSciences_address = new Address(Locale.getDefault());
         lifeSciences_address.setLatitude(41.8365884);
         lifeSciences_address.setLongitude(-87.6292395);
@@ -194,14 +194,14 @@ public class SqlHelper extends SQLiteOpenHelper {
         }
         mtcc = this.getBuildingByName("mtcc", db);
         List<User> barList = new ArrayList<>();
-        User bar = this.getUserByUsername("bar", db);
+        User bar = this.getUserByUsername("lsanchez7", db);
         barList.add(bar);
-        Activity activity = new Activity(0, "Actividad1", mtcc, date, barList, null, "details1");
+        Activity activity = new Activity(0, "Basketball", keating, date, barList, null, "Play basketball");
         this.addActivity(activity, db);
         List<User> fooList = new ArrayList<>();
-        User foo = this.getUserByUsername("foo", db);
+        User foo = this.getUserByUsername("mmarti45", db);
         fooList.add(foo);
-        Activity activityFoo = new Activity(0, "ActividadFoo", mtcc, date, fooList, null, "details1");
+        Activity activityFoo = new Activity(0, "Pool", mtcc, date, fooList, null, "Play pool");
         this.addActivity(activityFoo, db);
     }
     // TODO: Editar las siguientes funciones para que hagan peticiones a la base de datos.

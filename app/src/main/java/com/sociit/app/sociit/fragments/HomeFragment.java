@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -135,6 +136,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         List<Building> buildings = db.getAllBuildings();
         for (int i = 0; i < buildings.size(); i++) {
             Building building = buildings.get(i);
+            Log.d("Building",building.getName());
             LatLng buildingLatLong = new LatLng(building.getAddress().getLatitude(), building.getAddress().getLongitude());
             mMap.addMarker(new MarkerOptions()
                     .position(buildingLatLong)
