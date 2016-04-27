@@ -465,6 +465,7 @@ public class SqlHelper extends SQLiteOpenHelper {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                activity.setBuilding(getBuildingById(buildingId,db));
                 activity.setDate(activityDate);
                 // Add book to books
                 activities.add(activity);
