@@ -1,5 +1,4 @@
 package com.sociit.app.sociit.fragments;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +37,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -51,14 +50,11 @@ public class AddActivityFragment extends DialogFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private String buildingId="";
-
+    private String buildingId = "";
     private OnFragmentInteractionListener mListener;
-
     private Spinner spinner;
     private EditText activityName;
     private EditText activityDescription;
@@ -66,15 +62,11 @@ public class AddActivityFragment extends DialogFragment {
     private TimePicker timePicker;
     private Date datePickerDate;
     private User user;
-
     Intent i;
-
     SqlHelper db;
-
     public AddActivityFragment() {
         // Required empty public constructor
     }
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -92,27 +84,21 @@ public class AddActivityFragment extends DialogFragment {
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         db = new SqlHelper(getActivity().getApplicationContext());
-            if (getArguments() != null) {
+        if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         Bundle b = getArguments();
         final String userName = b.getString("userName");
-
         View view = inflater.inflate(R.layout.fragment_add_activity, container, false);
-
         //Spinner list and creation
         List<String> buildingsArray = new ArrayList<String>();
         buildingsArray.add("Select a place for the activity...");
@@ -127,34 +113,26 @@ public class AddActivityFragment extends DialogFragment {
         buildingsArray.add("Life Sciences Building");
         buildingsArray.add("Perlstein Hall");
         buildingsArray.add("Wishnick Hall");
-
         List<Building> buildingList = db.getAllBuildings();
-
         Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, buildingsArray);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, buildingsArray);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                if(parent.getItemAtPosition(pos).toString().equals("Select a place for the activity...")) {
-                    buildingId="";}
-
-                    else for(int i=1;i<12;i++)
-                        if (pos==i){
-                            buildingId=parent.getItemAtPosition(pos).toString();
-                        }
+                if (parent.getItemAtPosition(pos).toString().equals("Select a place for the activity...")) {
+                    buildingId = "";
+                } else for (int i = 1; i < 12; i++)
+                    if (pos == i) {
+                        buildingId = parent.getItemAtPosition(pos).toString();
+                    }
             }
-
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
-
         //Text fields creation
         activityName = (EditText) view.findViewById(R.id.activityName);
         activityDescription = (EditText) view.findViewById(R.id.activityDescription);
-
         //DatePicker and TimePicker initialization and parameters
         datePicker = (DatePicker) view.findViewById(R.id.datePicker);
         timePicker = (TimePicker) view.findViewById(R.id.timePicker);
@@ -166,12 +144,11 @@ public class AddActivityFragment extends DialogFragment {
         SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy");
         datePickerDate = new Date();
         try {
-            Log.d("date:","DAY "+month+" "+day+" "+hour+" "+minute+" 00 EDT "+year);
-            datePickerDate = formatter.parse("DAY "+month+" "+day+" "+hour+" "+minute+" 00 EDT "+year);
+            Log.d("date:", "DAY " + month + " " + day + " " + hour + " " + minute + " 00 EDT " + year);
+            datePickerDate = formatter.parse("DAY " + month + " " + day + " " + hour + " " + minute + " 00 EDT " + year);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         // Creation of the user list to add as activity parameter
         final List<User> userList = new ArrayList<>();
         user = db.getUserByUsername(userName);
@@ -180,18 +157,16 @@ public class AddActivityFragment extends DialogFragment {
        /* final List<Comment> commentList = new ArrayList<>();
         Comment comment = new Comment(0, activityDescription.getText().toString(), user, null);
         userList.add(user); */
-
         //Logic for create activity button
         Button createActivityButton = (Button) view.findViewById(R.id.createActivityButton);
         createActivityButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (verifyFields()){
-                    Toast.makeText(getContext(), "Activity created" , Toast.LENGTH_SHORT).show();
+                if (verifyFields()) {
+                    Toast.makeText(getContext(), "Activity created", Toast.LENGTH_SHORT).show();
                     //activity created with the parameters entered by the user
-                Activity activity = new Activity(0, activityName.getText().toString(), db.getBuildingByName(buildingId), datePickerDate, userList, null, activityDescription.getText().toString());
+                    Activity activity = new Activity(0, activityName.getText().toString(), db.getBuildingByName(buildingId), datePickerDate, userList, null, activityDescription.getText().toString());
                     //activity added to the database
                     db.addActivity(activity);
-
                     Fragment fragment = new ActivityFragment();
                     Bundle bundle = new Bundle();
                     bundle.putInt("userId", user.getId());
@@ -201,42 +176,38 @@ public class AddActivityFragment extends DialogFragment {
                     fragmentTransaction.replace(R.id.content_frame, fragment);
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
+
                 }
             }
         });
-
         return view;
     }
-
     //Method to verify that all fields are correctly filled
-    public boolean verifyFields(){
-        boolean validFields=true;
-
-        if (activityName.length()<1){
+    public boolean verifyFields() {
+        boolean validFields = true;
+        if (activityName.length() < 1) {
             activityName.setError("An activity name must be entered");
             activityName.requestFocus();
-            validFields=false;}
-         if(activityDescription.length()<1){
-                activityDescription.setError("A description for the activity must be entered");
-                activityName.requestFocus();
-                validFields=false;}
-         if(buildingId.equals("")){
-                    activityName.requestFocus();
-                    Toast.makeText(getContext(), "A place for the activity must be selected" , Toast.LENGTH_SHORT).show();
-                    validFields=false;
-                }
-
+            validFields = false;
+        }
+        if (activityDescription.length() < 1) {
+            activityDescription.setError("A description for the activity must be entered");
+            activityName.requestFocus();
+            validFields = false;
+        }
+        if (buildingId.equals("")) {
+            activityName.requestFocus();
+            Toast.makeText(getContext(), "A place for the activity must be selected", Toast.LENGTH_SHORT).show();
+            validFields = false;
+        }
         return validFields;
     }
-
-
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -247,13 +218,11 @@ public class AddActivityFragment extends DialogFragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
-
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
