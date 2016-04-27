@@ -7,7 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sociit.app.sociit.R;
 import com.sociit.app.sociit.entities.Activity;
@@ -30,6 +32,7 @@ public class ActivityDetailsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+//    SqlHelper db = new SqlHelper(getActivity().getApplicationContext());
 
     private OnFragmentInteractionListener mListener;
 
@@ -58,6 +61,7 @@ public class ActivityDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -74,12 +78,34 @@ public class ActivityDetailsFragment extends Fragment {
     }
 
     public void setupDetails(View v) {
-        TextView tv = (TextView) v.findViewById(R.id.activityId);
+        TextView activityIdName = (TextView) v.findViewById(R.id.activityIdName);
+        TextView activityIdCreator = (TextView) v.findViewById(R.id.activityIdCreator);
+        TextView activityIdDescription = (TextView) v.findViewById(R.id.activityIdDescription);
+        TextView activityIdDateAndTime = (TextView) v.findViewById(R.id.activityIdDateAndTime);
+        TextView activityIdPlace = (TextView) v.findViewById(R.id.activityIdPlace);
+        TextView activityIdPeople = (TextView) v.findViewById(R.id.activityIdPeople);
+        Button joinButton = (Button) v.findViewById(R.id.joinButton);
+
+        joinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "YO YO YO SUPPP" , Toast.LENGTH_SHORT).show();
+            //    db.linkUserActivity();
+                //***** IMPLEMENT USER ADDED TO THE ACTIVITY METHOD
+            }
+        });
+
         SqlHelper db = new SqlHelper(getActivity().getApplicationContext());
         int activityId = this.getArguments().getInt("activityId");
         Activity activity = db.getActivityById(activityId);
         String activityCreator = activity.getCreator() == null ? "NULL" : activity.getCreator().getName();
-        tv.setText(activity.getName() + ". Creador: " + activityCreator + ". Description: " + activity.getDescription());
+        activityIdName.setText(activity.getName());
+        activityIdCreator.setText(activityCreator);
+        activityIdDescription.setText(activity.getDescription());
+        activityIdDateAndTime.setText(activity.getDate().toString());
+        activityIdPlace.setText(activity.getBuilding().getName());
+      //  activityIdPeople.setText(activity.getNumberUsers());
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
