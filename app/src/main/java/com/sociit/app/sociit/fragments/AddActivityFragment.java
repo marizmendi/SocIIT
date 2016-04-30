@@ -102,7 +102,6 @@ public class AddActivityFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Bundle b = getArguments();
-        final String userName = b.getString("userName");
         View view = inflater.inflate(R.layout.fragment_add_activity, container, false);
         //Spinner list and creation
         List<String> buildingsArray = new ArrayList<String>();
@@ -147,7 +146,7 @@ public class AddActivityFragment extends DialogFragment {
                 if (verifyFields()) {
                     datePickerDate = getDateFromDateAndTimePicket(datePicker,timePicker);
                     final List<User> userList = new ArrayList<>();
-                    user = db.getUserByUsername(userName);
+                    user = db.getUserByUsername(((MyApplication) getActivity().getApplication()).getSession().getUser().getUsername());
                     userList.add(user);
                     Toast.makeText(getContext(), "Activity created", Toast.LENGTH_SHORT).show();
                     //activity created with the parameters entered by the user

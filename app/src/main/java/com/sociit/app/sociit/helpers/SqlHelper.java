@@ -316,6 +316,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         values.put(KEY_ACTIVITY_DESCRIPTION, activity.getDescription());
         //values.put(KEY_ACTIVITY_USER, activity.getUserList().get(0).getId());
         // 3. insert
+        activity.getUserList().toString();
         db.insert(TABLE_ACTIVITY, // table
                 null, //nullColumnHack
                 values); // key/value -> keys = column names/values
@@ -324,7 +325,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         }
     }
 
-    q
+
 
     public void linkUserActivity(User user, Activity activity) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -414,10 +415,10 @@ public class SqlHelper extends SQLiteOpenHelper {
     }
 
     public void leaveActivity(int idUser, int idActivity) {
-        String query = "SELECT * FROM " + TABLE_USER_ACTIVITY + " WHERE " + KEY_USER_ACTIVITY_ACTIVITY + " LIKE \"" + idActivity + "\"";
+        //String query = "SELECT * FROM " + TABLE_USER_ACTIVITY + " WHERE " + KEY_USER_ACTIVITY_ACTIVITY + " LIKE \"" + idActivity + "\"";
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery(query, null);
-        c.moveToFirst();
+        //Cursor c = db.rawQuery(query, null);
+        //c.moveToFirst();
         db.delete(TABLE_USER_ACTIVITY,
                 KEY_USER_ACTIVITY_USER + " = ? AND " + KEY_USER_ACTIVITY_ACTIVITY + " = ?",
                 new String[]{"" + idUser, idActivity + ""});
