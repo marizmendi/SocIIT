@@ -136,7 +136,12 @@ public class ActivityDetailsFragment extends Fragment {
                     ((MainActivity) getActivity()).twit("I've joined the activity " + activity.getName() + " at " + activity.getBuilding().getName());
 
                 } else Toast.makeText(getContext(), "You are already in this activity", Toast.LENGTH_SHORT).show();
+
                 userExists = false;
+
+                if (activity.getCreatorId() == user.getId()) {
+                    leaveButton.setVisibility(View.INVISIBLE);
+                }
             }
         });
 

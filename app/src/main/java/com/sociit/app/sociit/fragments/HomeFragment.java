@@ -83,6 +83,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null)
+                parent.removeView(view);
+        }
         try {
             view = inflater.inflate(R.layout.fragment_home, container, false);
         } catch (InflateException e) {

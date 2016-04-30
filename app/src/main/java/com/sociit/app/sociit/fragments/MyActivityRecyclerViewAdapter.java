@@ -77,7 +77,6 @@ public class MyActivityRecyclerViewAdapter extends RecyclerView.Adapter<MyActivi
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mActivityName.setText(mValues.get(position).getName());
-        holder.mParticipantsNumber.setText(mValues.get(position).getNumberUsers() + "");
         holder.mBuilding.setText(mValues.get(position).getBuilding().getName());
         holder.mDate.setText(mValues.get(position).getDate().toString());
         holder.mImageView.setImageResource(getBuildingImageId(mValues.get(position).getBuilding()));
@@ -99,7 +98,6 @@ public class MyActivityRecyclerViewAdapter extends RecyclerView.Adapter<MyActivi
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mActivityName;
-        public final TextView mParticipantsNumber;
         public final TextView mBuilding;
         public final TextView mDate;
         public final ImageView mImageView;
@@ -108,7 +106,6 @@ public class MyActivityRecyclerViewAdapter extends RecyclerView.Adapter<MyActivi
             super(view);
             mView = view;
             mActivityName = (TextView) view.findViewById(R.id.activityName);
-            mParticipantsNumber = (TextView) view.findViewById(R.id.participantsNumber);
             mBuilding = (TextView) view.findViewById(R.id.building);
             mDate = (TextView) view.findViewById(R.id.date);
             mImageView = (ImageView) view.findViewById(R.id.buildingImage);
