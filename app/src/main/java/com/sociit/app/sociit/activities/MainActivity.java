@@ -39,6 +39,8 @@ import com.sociit.app.sociit.fragments.BuildingFragment;
 import com.sociit.app.sociit.fragments.HomeFragment;
 import com.sociit.app.sociit.fragments.NewsFragment;
 import com.sociit.app.sociit.fragments.SettingsFragment;
+import com.sociit.app.sociit.gcm.GCMCommonUtils;
+import com.sociit.app.sociit.gcm.MyGCMRegistrationIntentService;
 import com.sociit.app.sociit.helpers.ConstantValues;
 import com.sociit.app.sociit.helpers.SqlHelper;
 import com.sociit.app.sociit.helpers.StringUtil;
@@ -75,6 +77,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        startRegistrationService(true, true);
+
         setContentView(R.layout.activity_main);
         title = getString(R.string.app_name);
         titleHistory.push(title);
@@ -209,6 +214,7 @@ public class MainActivity extends AppCompatActivity
             return true;
         } else if (id == R.id.action_sign_out) {
             ((MyApplication) getApplication()).setSession(null);
+            startRegistrationService(false, false);
             // Redirect to MainActivity
             TwitterHelper.getInstance().logoutTwitter(getApplicationContext());
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -391,5 +397,18 @@ public class MainActivity extends AppCompatActivity
 
         }
     }
+
+
+    public void startRegistrationService(boolean reg, boolean tkr) {
+        if (GCMCommonUtils.checkPlayServices(this)) {
+            Toast.makeText(this, "Registering for GCM...", Toast.LENGTH_LONG).show();
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, MyGCMRegistrationIntentService.class);
+            intent.putExtra("register", reg);
+            intent.putExtra("tokenRefreshed", tkr);
+            startService(intent);
+        }
+    }
+
 
 }

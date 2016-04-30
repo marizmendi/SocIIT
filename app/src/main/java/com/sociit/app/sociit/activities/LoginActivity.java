@@ -26,12 +26,16 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sociit.app.sociit.MyApplication;
 import com.sociit.app.sociit.R;
 import com.sociit.app.sociit.entities.Session;
 import com.sociit.app.sociit.entities.User;
+import com.sociit.app.sociit.gcm.GCMCommonUtils;
+import com.sociit.app.sociit.gcm.MyGCMRegistrationIntentService;
 import com.sociit.app.sociit.helpers.SqlHelper;
 import com.sociit.app.sociit.helpers.TwitterHelper;
 
@@ -69,6 +73,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        startRegistrationService(false, false);
 
         TwitterHelper.getInstance().logoutTwitter(getApplicationContext());
 
@@ -401,5 +407,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
     }
+
+    public void startRegistrationService(boolean reg, boolean tkr) {
+        if (GCMCommonUtils.checkPlayServices(this)) {
+            Toast.makeText(this, "Unregistering for GCM...", Toast.LENGTH_LONG).show();
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, MyGCMRegistrationIntentService.class);
+            intent.putExtra("register", reg);
+            intent.putExtra("tokenRefreshed", tkr);
+            startService(intent);
+        }
+    }
+
 }
 
