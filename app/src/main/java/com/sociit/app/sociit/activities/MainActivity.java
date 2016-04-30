@@ -1,15 +1,17 @@
 package com.sociit.app.sociit.activities;
+
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.ListFragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -27,6 +29,7 @@ import com.sociit.app.sociit.MyApplication;
 import com.sociit.app.sociit.R;
 import com.sociit.app.sociit.entities.Activity;
 import com.sociit.app.sociit.entities.Building;
+import com.sociit.app.sociit.entities.Session;
 import com.sociit.app.sociit.entities.User;
 import com.sociit.app.sociit.fragments.AboutFragment;
 import com.sociit.app.sociit.fragments.ActivityDetailsFragment;
@@ -35,11 +38,21 @@ import com.sociit.app.sociit.fragments.AddActivityFragment;
 import com.sociit.app.sociit.fragments.BuildingFragment;
 import com.sociit.app.sociit.fragments.HomeFragment;
 import com.sociit.app.sociit.fragments.NewsFragment;
-import com.sociit.app.sociit.fragments.RssFragment;
 import com.sociit.app.sociit.fragments.SettingsFragment;
+import com.sociit.app.sociit.helpers.ConstantValues;
 import com.sociit.app.sociit.helpers.SqlHelper;
+import com.sociit.app.sociit.helpers.StringUtil;
+import com.sociit.app.sociit.helpers.TwitterHelper;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Stack;
+
+import twitter4j.TwitterException;
+import twitter4j.auth.AccessToken;
+
 public class MainActivity extends AppCompatActivity
         implements
         NavigationView.OnNavigationItemSelectedListener,
@@ -57,6 +70,8 @@ public class MainActivity extends AppCompatActivity
     String title;
     private Stack<String> titleHistory = new Stack<>();
     public static FragmentManager fragmentManager;
+    private static Session session;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +79,14 @@ public class MainActivity extends AppCompatActivity
         title = getString(R.string.app_name);
         titleHistory.push(title);
         db = new SqlHelper(getApplicationContext());
-        user = db.getUserByUsername(getIntent().getExtras().getString("mUsername"));
+        try {
+            session = ((MyApplication) getApplication()).getSession();
+            user = db.getUserByUsername(session.getUser().getUsername());
+        } catch (Exception e) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
         welcomeToast(user);
         fragmentManager = getSupportFragmentManager();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -89,8 +111,11 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
         menuInitialState(navigationView);
+
     }
+
     public void welcomeToast(User user) {
         Context context = getApplicationContext();
         CharSequence text = "Welcome " + user.getName() + "!";
@@ -98,6 +123,7 @@ public class MainActivity extends AppCompatActivity
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
     }
+
     public void menuInitialState(NavigationView navigationView) {
         navigationView.getMenu().getItem(0).setChecked(true);
         Fragment fragment = new HomeFragment();
@@ -105,6 +131,7 @@ public class MainActivity extends AppCompatActivity
         ft.replace(R.id.content_frame, fragment);
         ft.commit();
     }
+
     public void openAddActivityFragment() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         ViewCompat.animate(fab)
@@ -122,6 +149,7 @@ public class MainActivity extends AppCompatActivity
         ft.addToBackStack(null);
         ft.commit();
     }
+
     public void closeDialog() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         ViewCompat.animate(fab)
@@ -131,25 +159,35 @@ public class MainActivity extends AppCompatActivity
                 .start();
         getSupportFragmentManager().popBackStackImmediate();
     }
+
     ;
+
     @Override
     public void onBackPressed() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            ViewCompat.animate(fab)
+                    .rotation(0)
+                    .setDuration(500)
+                    .setInterpolator(new BounceInterpolator())
+                    .start();
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setTitle(titleHistory.pop());
             }
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -172,6 +210,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.action_sign_out) {
             ((MyApplication) getApplication()).setSession(null);
             // Redirect to MainActivity
+            TwitterHelper.getInstance().logoutTwitter(getApplicationContext());
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
@@ -179,6 +218,8 @@ public class MainActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -189,6 +230,7 @@ public class MainActivity extends AppCompatActivity
         displayView(item.getItemId());
         return true;
     }
+
     public void displayView(int viewId) {
         dialog_open = false;
         Fragment fragment = null;
@@ -233,9 +275,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
     }
+
     @Override
     public void onFragmentInteraction(Uri uri) {
     }
+
     @Override
     public void onFragmentInteraction(int userId) {
         dialog_open = false;
@@ -254,6 +298,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.content_frame, fragment);
         fragmentTransaction.commit();
     }
+
     @Override
     public void onFragmentInteraction(Marker marker) {
         Building building = db.getBuildingByName(marker.getTitle());
@@ -270,6 +315,7 @@ public class MainActivity extends AppCompatActivity
         ft.addToBackStack(null);
         ft.commit();
     }
+
     @Override
     public void onListFragmentInteraction(Activity activity) {
         Fragment fragment = new ActivityDetailsFragment();
@@ -282,6 +328,7 @@ public class MainActivity extends AppCompatActivity
         ft.addToBackStack(null);
         ft.commit();
     }
+
     @Override
     public void onListFragmentInteraction(Building building) {
         if (getSupportActionBar() != null) {
@@ -297,4 +344,52 @@ public class MainActivity extends AppCompatActivity
         ft.addToBackStack(null);
         ft.commit();
     }
+
+    public void twit(String twit) {
+        Date date = new Date();
+        String[] dateArray = date.toString().split(" ");
+        String day = dateArray[2];
+        String month = dateArray[1];
+        String year = dateArray[5];
+        String time = dateArray[3];
+
+        twit = "[" + month + "/" + day + "/" + year + " " + time + "] - " + twit;
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if (sharedPreferences.getBoolean(ConstantValues.PREFERENCE_TWITTER_IS_LOGGED_IN, true)) {
+            new TwitterUpdateStatusTask().execute(twit);
+        }
+    }
+
+    class TwitterUpdateStatusTask extends AsyncTask<String, String, Boolean> {
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if (result)
+                Toast.makeText(getApplicationContext(), "Tweet successfully", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(getApplicationContext(), "Tweet failed", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            try {
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                String accessTokenString = sharedPreferences.getString(ConstantValues.PREFERENCE_TWITTER_OAUTH_TOKEN, "");
+                String accessTokenSecret = sharedPreferences.getString(ConstantValues.PREFERENCE_TWITTER_OAUTH_TOKEN_SECRET, "");
+
+                if (!StringUtil.isNullOrWhitespace(accessTokenString) && !StringUtil.isNullOrWhitespace(accessTokenSecret)) {
+                    AccessToken accessToken = new AccessToken(accessTokenString, accessTokenSecret);
+                    twitter4j.Status status = TwitterHelper.getInstance().getTwitterFactory().getInstance(accessToken).updateStatus(params[0]);
+                    return true;
+                }
+
+            } catch (TwitterException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+            return false;  //To change body of implemented methods use File | Settings | File Templates.
+
+        }
+    }
+
 }

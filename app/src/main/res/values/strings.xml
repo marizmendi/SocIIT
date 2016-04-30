@@ -37,7 +37,8 @@
     <string name="social_network_preference">"Social Networks"</string>
 
     <string name="twitter">"Twitter"</string>
-    <string name="twitter_message">"Click to sign in"</string>
+    <string name="twitter_message_in">"Click to sign in"</string>
+    <string name="twitter_message_out">"Click to sign out"</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

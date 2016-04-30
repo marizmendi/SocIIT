@@ -2,16 +2,26 @@ package com.sociit.app.sociit.fragments;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.Image;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.sociit.app.sociit.MyApplication;
 import com.sociit.app.sociit.R;
+import com.sociit.app.sociit.activities.MainActivity;
+import com.sociit.app.sociit.helpers.ConstantValues;
+import com.sociit.app.sociit.helpers.TwitterHelper;
+
+import twitter4j.auth.RequestToken;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,17 +76,46 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                //code for what you want it to do
-                Toast.makeText(getContext(), "TWITTER LOGIN", Toast.LENGTH_LONG).show();
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                if (sharedPreferences.getBoolean(ConstantValues.PREFERENCE_TWITTER_IS_LOGGED_IN, true)) {
+                    TwitterHelper.getInstance().logoutTwitter(getActivity().getApplicationContext());
+                    getActivity().getSupportFragmentManager().popBackStackImmediate();
+                } else {
+                    //code for what you want it to do
+                    new TwitterAuthenticateTask().execute();
+                    Toast.makeText(getContext(), "Redirecting...", Toast.LENGTH_LONG).show();
+                }
                 return true;
             }
         });
 
     }
 
+    class TwitterAuthenticateTask extends AsyncTask<String, String, RequestToken> {
+
+        @Override
+        protected void onPostExecute(RequestToken requestToken) {
+            if (requestToken != null) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(requestToken.getAuthenticationURL()));
+                startActivity(intent);
+            }
+        }
+
+        @Override
+        protected RequestToken doInBackground(String... params) {
+            return TwitterHelper.getInstance().getRequestToken();
+        }
+    }
+
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
-        addPreferencesFromResource(R.xml.preferences);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        if (sharedPreferences.getBoolean(ConstantValues.PREFERENCE_TWITTER_IS_LOGGED_IN, true)) {
+            addPreferencesFromResource(R.xml.preferences_logout);
+        } else {
+            addPreferencesFromResource(R.xml.preferences_login);
+        }
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -108,7 +147,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.

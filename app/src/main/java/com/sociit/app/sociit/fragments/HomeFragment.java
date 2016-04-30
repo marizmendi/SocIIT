@@ -1,4 +1,5 @@
 package com.sociit.app.sociit.fragments;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
@@ -26,6 +27,7 @@ import com.sociit.app.sociit.entities.Building;
 import com.sociit.app.sociit.helpers.SqlHelper;
 
 import java.util.List;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -46,9 +48,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     private static GoogleMap mMap;
     private static View view;
     private Marker clickedMarker = null;
+
     public HomeFragment() {
         // Required empty public constructor
     }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -66,6 +70,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,14 +79,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if (view != null) {
-            ViewGroup parent = (ViewGroup) view.getParent();
-            if (parent != null)
-                parent.removeView(view);
-        }
         try {
             view = inflater.inflate(R.layout.fragment_home, container, false);
         } catch (InflateException e) {
@@ -89,6 +90,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         }
         return view;
     }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -97,6 +99,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
                 .findFragmentById(R.id.map));
         mapFragment.getMapAsync(this);
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -107,11 +110,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
                     + " must implement OnFragmentInteractionListener");
         }
     }
+
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -128,7 +133,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
                 new LatLng(41.83, -87.63), new LatLng(41.8411, -87.6235));
         // Set the camera to the greatest possible zoom level that includes the
         // bounds
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(IIT, 0));
+        try {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(IIT, 0));
+        } catch (Exception e) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(IIT, 1500, 1500, 0));
+        }
         mMap.getUiSettings().setRotateGesturesEnabled(false);
         mMap.getUiSettings().setTiltGesturesEnabled(false);
         mMap.setOnMarkerClickListener(this);
@@ -136,22 +145,24 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         List<Building> buildings = db.getAllBuildings();
         for (int i = 0; i < buildings.size(); i++) {
             Building building = buildings.get(i);
-            Log.d("Building",building.getName());
+            Log.d("Building", building.getName());
             LatLng buildingLatLong = new LatLng(building.getAddress().getLatitude(), building.getAddress().getLongitude());
             mMap.addMarker(new MarkerOptions()
                     .position(buildingLatLong)
                     .title(building.getName()));
         }
     }
+
     @Override
     public boolean onMarkerClick(Marker marker) {
         clickedMarker = marker;
         CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(marker.getPosition().latitude, marker.getPosition().longitude), mMap.getCameraPosition().zoom);
-        mMap.animateCamera(cu, 100,new GoogleMap.CancelableCallback() {
+        mMap.animateCamera(cu, 100, new GoogleMap.CancelableCallback() {
             @Override
             public void onFinish() {
                 showDialog();
             }
+
             @Override
             public void onCancel() {
                 return;
@@ -159,6 +170,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         });
         return true;
     }
+
     public void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(clickedMarker.getTitle()).setPositiveButton("See activities", dialogClickListener)
@@ -179,6 +191,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
             }
         }
     };
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated

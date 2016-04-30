@@ -5,7 +5,7 @@
         android:title="@string/social_network_preference">
         <Preference android:title="@string/twitter"
                     android:key="@string/twitter"
-                    android:summary="@string/twitter_message"/>
+                    android:summary="@string/twitter_message_out"/>
         <!--CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_key_auto_delete"
