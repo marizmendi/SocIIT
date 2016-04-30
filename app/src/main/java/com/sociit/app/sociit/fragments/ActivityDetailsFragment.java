@@ -105,14 +105,14 @@ public class ActivityDetailsFragment extends Fragment {
         User user = ((MyApplication) getActivity().getApplication()).getSession().getUser();
         for(int i=0; i<db.getActivityUsers(activity).size();i++) {
             //Checks if the user is in that activity already and if so, displays the leave button
-            if (db.getActivityUsers(activity).get(i).getName().equals(user.getName())) {
+            if (activity.getUserList().get(i).getName().equals(user.getName())) {
                 userExists = true;
                 leaveButton.setVisibility(View.VISIBLE);
             }
         }
 
         //If the user is the creator the button does not show
-        if (db.getActivityUsers(activity).get(0).getId()==1){
+        if (activity.getCreatorId()==user.getId()){
                 leaveButton.setVisibility(View.INVISIBLE);
             }
 
