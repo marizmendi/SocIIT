@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "921287206465",
+    "project_id": "sociit-6c56e"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:921287206465:android:7d0e317dacaebcd8",
+        "android_client_info": {
+          "package_name": "com.sociit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH72beFKULQ72k9sZB9BPNDfQTU5bwEP0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-77173018-1"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
