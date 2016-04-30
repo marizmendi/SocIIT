@@ -1,4 +1,5 @@
 package com.sociit.app.sociit.helpers;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -20,6 +21,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+
 /**
  * Created by Manuel on 19/04/2016.
  */
@@ -100,9 +102,11 @@ public class SqlHelper extends SQLiteOpenHelper {
                     "FOREIGN KEY(" + KEY_USER_ACTIVITY_USER + ") REFERENCES users(" + KEY_ID + "), " +
                     "FOREIGN KEY(" + KEY_USER_ACTIVITY_ACTIVITY + ") REFERENCES activities(" + KEY_ID + ") " +
                     ")";
+
     public SqlHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         // creating required tables
@@ -113,6 +117,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_USER_ACTIVITY);
         prepopulateDB(db);
     }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // on upgrade drop older tables
@@ -124,6 +129,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         // create new tables
         onCreate(db);
     }
+
     private void prepopulateDB(SQLiteDatabase db) {
         User user1 = new User(0, "mmarti45", "Manuel Martinez", "hello", null);
         this.addUser(user1, db);
@@ -204,12 +210,14 @@ public class SqlHelper extends SQLiteOpenHelper {
         Activity activityFoo = new Activity(0, "Pool", mtcc, date, fooList, null, "Play pool");
         this.addActivity(activityFoo, db);
     }
+
     // TODO: Editar las siguientes funciones para que hagan peticiones a la base de datos.
     public void addUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
         addUser(user, db);
         db.close();
     }
+
     public void addUser(User user, SQLiteDatabase db) {
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
@@ -221,6 +229,7 @@ public class SqlHelper extends SQLiteOpenHelper {
                 null, //nullColumnHack
                 values); // key/value -> keys = column names/values
     }
+
     public User getUserById(int userId, SQLiteDatabase db) {
         String query = "SELECT * FROM " + TABLE_USER + " WHERE " + KEY_ID + " LIKE \"" + userId + "\"";
         List<User> users = new LinkedList<User>();
@@ -244,18 +253,21 @@ public class SqlHelper extends SQLiteOpenHelper {
         }
         return returnUser;
     }
+
     public User getUserById(int userId) {
         SQLiteDatabase db = this.getWritableDatabase();
         User user = getUserById(userId, db);
         db.close();
         return user;
     }
+
     public User getUserByUsername(String username) {
         SQLiteDatabase db = this.getWritableDatabase();
         User user = getUserByUsername(username, db);
         db.close();
         return user;
     }
+
     public User getUserByUsername(String username, SQLiteDatabase db) {
         String query = "SELECT * FROM " + TABLE_USER + " WHERE " + KEY_USER_USERNAME + " LIKE \"" + username + "\"";
         List<User> users = new LinkedList<User>();
@@ -279,17 +291,22 @@ public class SqlHelper extends SQLiteOpenHelper {
         }
         return returnUser;
     }
+
+
     public void editUser(User user) {
         return;
     }
+
     public void deleteUser(User user) {
         return;
     }
+
     public void addActivity(Activity activity) {
         SQLiteDatabase db = this.getWritableDatabase();
         addActivity(activity, db);
         db.close();
     }
+
     public void addActivity(Activity activity, SQLiteDatabase db) {
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
@@ -306,11 +323,15 @@ public class SqlHelper extends SQLiteOpenHelper {
             this.linkUserActivity(activity.getCreator(), this.getActivityByName(activity.getName(), db), db);
         }
     }
+
+    q
+
     public void linkUserActivity(User user, Activity activity) {
         SQLiteDatabase db = this.getWritableDatabase();
         linkUserActivity(user, activity, db);
         db.close();
     }
+
     public void linkUserActivity(User user, Activity activity, SQLiteDatabase db) {
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
@@ -321,6 +342,18 @@ public class SqlHelper extends SQLiteOpenHelper {
                 null, //nullColumnHack
                 values); // key/value -> keys = column names/values
     }
+
+    public void unlinkUserActivity(User user, Activity activity) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        unlinkUserActivity(user, activity, db);
+        db.close();
+    }
+
+
+    public void unlinkUserActivity(User user, Activity activity, SQLiteDatabase db) {
+        db.execSQL("DELETE FROM " + TABLE_USER_ACTIVITY + " WHERE " + KEY_USER_ACTIVITY_USER + "=\"" + user.getId() + "\" AND " + KEY_USER_ACTIVITY_ACTIVITY + "=\"" + activity.getId() + "\";");
+    }
+
     public Activity getActivityById(int id, SQLiteDatabase db) {
         List<Activity> activities = new LinkedList<Activity>();
         // 1. build the query
@@ -379,6 +412,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         }
         return users;
     }
+
     public void leaveActivity(int idUser, int idActivity) {
         String query = "SELECT * FROM " + TABLE_USER_ACTIVITY + " WHERE " + KEY_USER_ACTIVITY_ACTIVITY + " LIKE \"" + idActivity + "\"";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -386,15 +420,17 @@ public class SqlHelper extends SQLiteOpenHelper {
         c.moveToFirst();
         db.delete(TABLE_USER_ACTIVITY,
                 KEY_USER_ACTIVITY_USER + " = ? AND " + KEY_USER_ACTIVITY_ACTIVITY + " = ?",
-                new String[] {""+idUser, idActivity+""});
+                new String[]{"" + idUser, idActivity + ""});
         db.close();
     }
+
     public Activity getActivityById(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         Activity returnActivity = this.getActivityById(id, db);
         db.close();
         return returnActivity;
     }
+
     public Activity getActivityByName(String name, SQLiteDatabase db) {
         List<Activity> activities = new LinkedList<Activity>();
         // 1. build the query
@@ -431,12 +467,14 @@ public class SqlHelper extends SQLiteOpenHelper {
         }
         return returnActivity;
     }
+
     public Activity getActivityByName(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         Activity returnActivity = this.getActivityByName(name, db);
         db.close();
         return returnActivity;
     }
+
     public List<Activity> getActivitiesByUserId(int userId) {
         List<Activity> activities = new LinkedList<Activity>();
         // 1. build the query
@@ -456,6 +494,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         db.close();
         return activities; // return books
     }
+
     public List<Activity> getActivitiesByBuildingId(int buildingId, SQLiteDatabase db) {
         List<Activity> activities = new LinkedList<Activity>();
         // 1. build the query
@@ -475,7 +514,7 @@ public class SqlHelper extends SQLiteOpenHelper {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                activity.setBuilding(getBuildingById(buildingId,db));
+                activity.setBuilding(getBuildingById(buildingId, db));
                 activity.setDate(activityDate);
                 // Add book to books
                 activities.add(activity);
@@ -483,12 +522,14 @@ public class SqlHelper extends SQLiteOpenHelper {
         }
         return activities; // return activities
     }
+
     public List<Activity> getActivitiesByBuildingId(int buildingId) {
         SQLiteDatabase db = this.getWritableDatabase();
         List<Activity> activities = this.getActivitiesByBuildingId(buildingId, db);
         db.close();
         return activities;
     }
+
     // NOT WORKING, WHY?
     public long getNumberOfActivities() {
         String query = "SELECT COUNT(*) FROM " + TABLE_ACTIVITY;
@@ -497,6 +538,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         long count = statement.simpleQueryForLong();
         return count;
     }
+
     public List<Activity> getAllActivities() {
         List<Activity> activities = new LinkedList<Activity>();
         // 1. build the query
@@ -529,6 +571,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         db.close();
         return activities; // return activities
     }
+
     public List<Activity> getUserActivities(User user) {
         List<Activity> activityList = new LinkedList<>();
         Activity activity = new Activity();
@@ -536,6 +579,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         activityList.add(activity);
         return activityList;
     }
+
     public void addBuilding(Building building, SQLiteDatabase db) {
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
@@ -546,6 +590,7 @@ public class SqlHelper extends SQLiteOpenHelper {
                 null, //nullColumnHack
                 values); // key/value -> keys = column names/values
     }
+
     public List<Activity> getBuildingActivities(Building building) {
         List<Activity> activityList = new LinkedList<>();
         Activity activity = new Activity();
@@ -553,18 +598,22 @@ public class SqlHelper extends SQLiteOpenHelper {
         activityList.add(activity);
         return activityList;
     }
+
     public void editActivity(Activity activity) {
         return;
     }
+
     public void deleteActivity(Activity activity) {
         return;
     }
+
     public Building getBuildingByName(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         Building building = this.getBuildingByName(name, db);
         db.close();
         return building;
     }
+
     public Building getBuildingByName(String name, SQLiteDatabase db) {
         String query = "SELECT * FROM " + TABLE_BUILDING + " WHERE name LIKE \"" + name + "\"";
         List<Building> buildings = new LinkedList<Building>();
@@ -590,12 +639,14 @@ public class SqlHelper extends SQLiteOpenHelper {
         }
         return returnBuilding;
     }
+
     public Building getBuildingById(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         Building building = this.getBuildingById(id, db);
         db.close();
         return building;
     }
+
     public Building getBuildingById(int id, SQLiteDatabase db) {
         String query = "SELECT * FROM " + TABLE_BUILDING + " WHERE id LIKE \"" + id + "\"";
         List<Building> buildings = new LinkedList<Building>();
@@ -621,6 +672,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         }
         return returnBuilding;
     }
+
     public List<Building> getAllBuildings(SQLiteDatabase db) {
         List<Building> buildings = new LinkedList<Building>();
         // 1. build the query
@@ -645,15 +697,18 @@ public class SqlHelper extends SQLiteOpenHelper {
         cursor.close();
         return buildings;
     }
+
     public List<Building> getAllBuildings() {
         SQLiteDatabase db = this.getWritableDatabase();
         List<Building> buildings = this.getAllBuildings(db);
         db.close();
         return buildings;
     }
+
     public void addComment(Comment comment) {
         return;
     }
+
     public List<Comment> getActivityComments(Activity activity) {
         return null;
     }
