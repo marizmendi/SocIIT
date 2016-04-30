@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sociit.app.sociit.R;
+import com.sociit.app.sociit.activities.MainActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,6 +59,9 @@ public class AboutFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ((MainActivity) getActivity()).twit("I pressed about");
+
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);

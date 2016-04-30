@@ -33,6 +33,7 @@ import com.sociit.app.sociit.R;
 import com.sociit.app.sociit.entities.Session;
 import com.sociit.app.sociit.entities.User;
 import com.sociit.app.sociit.helpers.SqlHelper;
+import com.sociit.app.sociit.helpers.TwitterHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +69,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        TwitterHelper.getInstance().logoutTwitter(getApplicationContext());
 
         //TODO: session remember?
         boolean session = false; //((MyApplication) getApplication()).getSession() != null;
