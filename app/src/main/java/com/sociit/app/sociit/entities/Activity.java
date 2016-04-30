@@ -72,6 +72,10 @@ public class Activity {
         if (userList != null) return userList.size();
         else return 0;
     }
+    public int getCreatorId(){
+        if (userList != null) return userList.get(0).getId();
+        else return 0;
+    }
     public String getDescription() {
         return description;
     }
