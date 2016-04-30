@@ -27,7 +27,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     // Logcat tag
     private static final String LOG = "SqlHelper";
     // Database Version
-    private static final int DATABASE_VERSION = 30;
+    private static final int DATABASE_VERSION = 38;
     // Database Name
     private static final String DATABASE_NAME = "SociitDB";
     // Table Names
@@ -378,6 +378,16 @@ public class SqlHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         return users;
+    }
+    public void leaveActivity(int idUser, int idActivity) {
+        String query = "SELECT * FROM " + TABLE_USER_ACTIVITY + " WHERE " + KEY_USER_ACTIVITY_ACTIVITY + " LIKE \"" + idActivity + "\"";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        db.delete(TABLE_USER_ACTIVITY,
+                KEY_USER_ACTIVITY_USER + " = ? AND " + KEY_USER_ACTIVITY_ACTIVITY + " = ?",
+                new String[] {""+idUser, idActivity+""});
+        db.close();
     }
     public Activity getActivityById(int id) {
         SQLiteDatabase db = this.getWritableDatabase();

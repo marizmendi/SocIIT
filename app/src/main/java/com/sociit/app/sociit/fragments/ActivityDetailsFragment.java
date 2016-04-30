@@ -36,7 +36,7 @@ public class ActivityDetailsFragment extends Fragment {
     private String mParam2;
     private Activity activity;
     private OnFragmentInteractionListener mListener;
-    boolean userExists = false;
+    boolean userExists;
 
     public ActivityDetailsFragment() {
         // Required empty public constructor
@@ -75,6 +75,7 @@ public class ActivityDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_activity_details, container, false);
+
         setupDetails(v);
         return v;
     }
@@ -88,8 +89,10 @@ public class ActivityDetailsFragment extends Fragment {
         TextView activityIdPlace = (TextView) v.findViewById(R.id.activityIdPlace);
         TextView activityIdPeople = (TextView) v.findViewById(R.id.activityIdPeople);
         Button joinButton = (Button) v.findViewById(R.id.joinButton);
+        final Button leaveButton = (Button) v.findViewById(R.id.leaveButton);
+        leaveButton.setVisibility(View.INVISIBLE);
 
-        int activityId = this.getArguments().getInt("activityId");
+        final int activityId = this.getArguments().getInt("activityId");
         activity = db.getActivityById(activityId);
         final String activityCreator = activity.getCreator() == null ? "NULL" : activity.getCreator().getName();
         activityIdName.setText(activity.getName());
@@ -99,21 +102,50 @@ public class ActivityDetailsFragment extends Fragment {
         activityIdPlace.setText(activity.getBuilding().getName());
         activityIdPeople.setText(""+activity.getNumberUsers());
 
+        User user = ((MyApplication) getActivity().getApplication()).getSession().getUser();
+        for(int i=0; i<db.getActivityUsers(activity).size();i++) {
+            //Checks if the user is in that activity already and if so, displays the leave button
+            if (db.getActivityUsers(activity).get(i).getName().equals(user.getName())) {
+                userExists = true;
+                leaveButton.setVisibility(View.VISIBLE);
+            }
+        }
+
+        //If the user is the creator the button does not show
+        if (db.getActivityUsers(activity).get(0).getId()==1){
+                leaveButton.setVisibility(View.INVISIBLE);
+            }
+
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 User user = ((MyApplication) getActivity().getApplication()).getSession().getUser();
                 for(int i=0; i<db.getActivityUsers(activity).size();i++){
-                        if(db.getActivityUsers(activity).get(i).getName().equals(user.getName())){
-                            userExists = true;
+                    if(db.getActivityUsers(activity).get(i).getName().equals(user.getName())){
+                        userExists = true;
+                        if(db.getActivityUsers(activity).get(i).getId()!=1) {
+                            leaveButton.setVisibility(View.VISIBLE);
                         }
+                    }
                 }
                 if(!userExists) {
                   db.linkUserActivity(user, activity);
+                  leaveButton.setVisibility(View.VISIBLE);
                   Toast.makeText(getContext(), "You have successfully joined the event", Toast.LENGTH_SHORT).show();
               }
                 else Toast.makeText(getContext(), "You are already in this activity", Toast.LENGTH_SHORT).show();
             userExists = false;
+            }
+        });
+
+        leaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                User user = ((MyApplication) getActivity().getApplication()).getSession().getUser();
+                Toast.makeText(getContext(), "You have successfully canceled your participation in the activity", Toast.LENGTH_SHORT).show();
+                db.leaveActivity(user.getId(), activityId);
+                userExists = false;
+                leaveButton.setVisibility(View.INVISIBLE);
             }
         });
     }
