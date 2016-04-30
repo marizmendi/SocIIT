@@ -353,7 +353,7 @@ public class MainActivity extends AppCompatActivity
         String year = dateArray[5];
         String time = dateArray[3];
 
-        twit = "[" + month + "/" + day + "/" + year + " " + time + "] - " + twit;
+        twit = "[" + month + "/" + day + "/" + year + " " + time + "] - " + twit + " in SocIIT: www.iit.edu #sociit";
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if (sharedPreferences.getBoolean(ConstantValues.PREFERENCE_TWITTER_IS_LOGGED_IN, true)) {

@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.sociit.app.sociit.MyApplication;
 import com.sociit.app.sociit.R;
+import com.sociit.app.sociit.activities.MainActivity;
 import com.sociit.app.sociit.entities.Activity;
 import com.sociit.app.sociit.entities.User;
 import com.sociit.app.sociit.helpers.SqlHelper;
@@ -100,10 +101,10 @@ public class ActivityDetailsFragment extends Fragment {
         activityIdDescription.setText(activity.getDescription());
         activityIdDateAndTime.setText(activity.getDate().toString());
         activityIdPlace.setText(activity.getBuilding().getName());
-        activityIdPeople.setText(""+activity.getNumberUsers());
+        activityIdPeople.setText("" + activity.getNumberUsers());
 
         User user = ((MyApplication) getActivity().getApplication()).getSession().getUser();
-        for(int i=0; i<db.getActivityUsers(activity).size();i++) {
+        for (int i = 0; i < db.getActivityUsers(activity).size(); i++) {
             //Checks if the user is in that activity already and if so, displays the leave button
             if (activity.getUserList().get(i).getName().equals(user.getName())) {
                 userExists = true;
@@ -112,29 +113,30 @@ public class ActivityDetailsFragment extends Fragment {
         }
 
         //If the user is the creator the button does not show
-        if (activity.getCreatorId()==user.getId()){
-                leaveButton.setVisibility(View.INVISIBLE);
-            }
+        if (activity.getCreatorId() == user.getId()) {
+            leaveButton.setVisibility(View.INVISIBLE);
+        }
 
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 User user = ((MyApplication) getActivity().getApplication()).getSession().getUser();
-                for(int i=0; i<db.getActivityUsers(activity).size();i++){
-                    if(db.getActivityUsers(activity).get(i).getName().equals(user.getName())){
+                for (int i = 0; i < db.getActivityUsers(activity).size(); i++) {
+                    if (db.getActivityUsers(activity).get(i).getName().equals(user.getName())) {
                         userExists = true;
-                        if(db.getActivityUsers(activity).get(i).getId()!=1) {
+                        if (db.getActivityUsers(activity).get(i).getId() != 1) {
                             leaveButton.setVisibility(View.VISIBLE);
                         }
                     }
                 }
-                if(!userExists) {
-                  db.linkUserActivity(user, activity);
-                  leaveButton.setVisibility(View.VISIBLE);
-                  Toast.makeText(getContext(), "You have successfully joined the event", Toast.LENGTH_SHORT).show();
-              }
-                else Toast.makeText(getContext(), "You are already in this activity", Toast.LENGTH_SHORT).show();
-            userExists = false;
+                if (!userExists) {
+                    db.linkUserActivity(user, activity);
+                    leaveButton.setVisibility(View.VISIBLE);
+                    Toast.makeText(getContext(), "You have successfully joined the event", Toast.LENGTH_SHORT).show();
+                    ((MainActivity) getActivity()).twit("I've joined the activity " + activity.getName() + " at " + activity.getBuilding().getName());
+
+                } else Toast.makeText(getContext(), "You are already in this activity", Toast.LENGTH_SHORT).show();
+                userExists = false;
             }
         });
 

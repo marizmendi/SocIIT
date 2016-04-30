@@ -1,4 +1,5 @@
 package com.sociit.app.sociit.fragments;
+
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 
 import com.sociit.app.sociit.MyApplication;
 import com.sociit.app.sociit.R;
+import com.sociit.app.sociit.activities.MainActivity;
 import com.sociit.app.sociit.entities.Activity;
 import com.sociit.app.sociit.entities.Building;
 import com.sociit.app.sociit.entities.Comment;
@@ -42,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -69,9 +72,11 @@ public class AddActivityFragment extends DialogFragment {
     private User user;
     Intent i;
     SqlHelper db;
+
     public AddActivityFragment() {
         // Required empty public constructor
     }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -89,6 +94,7 @@ public class AddActivityFragment extends DialogFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +104,7 @@ public class AddActivityFragment extends DialogFragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -108,7 +115,7 @@ public class AddActivityFragment extends DialogFragment {
         List<Building> buildingList = db.getAllBuildings();
 
         buildingsArray.add("Select a place for the activity...");
-        for(int i = 0; i<buildingList.size();i++){
+        for (int i = 0; i < buildingList.size(); i++) {
             buildingsArray.add(buildingList.get(i).getName());
         }
 
@@ -125,6 +132,7 @@ public class AddActivityFragment extends DialogFragment {
                         buildingId = parent.getItemAtPosition(pos).toString();
                     }
             }
+
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
@@ -144,7 +152,7 @@ public class AddActivityFragment extends DialogFragment {
         createActivityButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if (verifyFields()) {
-                    datePickerDate = getDateFromDateAndTimePicket(datePicker,timePicker);
+                    datePickerDate = getDateFromDateAndTimePicket(datePicker, timePicker);
                     final List<User> userList = new ArrayList<>();
                     user = db.getUserByUsername(((MyApplication) getActivity().getApplication()).getSession().getUser().getUsername());
                     userList.add(user);
@@ -153,7 +161,7 @@ public class AddActivityFragment extends DialogFragment {
                     Activity activity = new Activity(0, activityName.getText().toString(), db.getBuildingByName(buildingId), datePickerDate, userList, null, activityDescription.getText().toString());
                     //activity added to the database
                     db.addActivity(activity);
-
+                    ((MainActivity) getActivity()).twit("Check out my new activity " + activity.getName() + " at " + activity.getBuilding().getName());
                     mListener.onFragmentInteraction(user.getId());
                 }
             }
@@ -164,14 +172,15 @@ public class AddActivityFragment extends DialogFragment {
     }
 
     /**
-     *From http://stackoverflow.com/questions/2592499/casting-and-getting-values-from-date-picker-and-time-picker-in-android/14590203#14590203
+     * From http://stackoverflow.com/questions/2592499/casting-and-getting-values-from-date-picker-and-time-picker-in-android/14590203#14590203
+     *
      * @param datePicker
      * @return a java.util.Date
      */
-    public static java.util.Date getDateFromDateAndTimePicket(DatePicker datePicker, TimePicker timePicker){
+    public static java.util.Date getDateFromDateAndTimePicket(DatePicker datePicker, TimePicker timePicker) {
         int day = datePicker.getDayOfMonth();
         int month = datePicker.getMonth();
-        int year =  datePicker.getYear();
+        int year = datePicker.getYear();
         int hour = timePicker.getCurrentHour();
         int minute = timePicker.getCurrentMinute();
 
@@ -213,11 +222,13 @@ public class AddActivityFragment extends DialogFragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
+
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
