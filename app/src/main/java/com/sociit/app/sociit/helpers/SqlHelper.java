@@ -29,7 +29,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     // Logcat tag
     private static final String LOG = "SqlHelper";
     // Database Version
-    private static final int DATABASE_VERSION = 38;
+    private static final int DATABASE_VERSION = 39;
     // Database Name
     private static final String DATABASE_NAME = "SociitDB";
     // Table Names
@@ -135,6 +135,8 @@ public class SqlHelper extends SQLiteOpenHelper {
         this.addUser(user1, db);
         User user2 = new User(0, "lsanchez7", "Lazaro Sanchez", "world", null);
         this.addUser(user2, db);
+        User user3 = new User(0, "anicolas", "Alejandro Nicolas", "hello", null);
+        this.addUser(user3, db);
         //TODO: Fix latitudes and longitudes and add missing buildings
         Address mtcc_address = new Address(Locale.getDefault());
         mtcc_address.setLatitude(41.835728);

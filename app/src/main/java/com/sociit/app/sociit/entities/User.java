@@ -41,6 +41,7 @@ public class User {
     }
 
     public String getName() {
+        if (name.equals("null")) return "No user yet";
         return name;
     }
 
