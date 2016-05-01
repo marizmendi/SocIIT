@@ -88,12 +88,12 @@ public class MainActivity extends AppCompatActivity
         try {
             session = ((MyApplication) getApplication()).getSession();
             user = db.getUserByUsername(session.getUser().getUsername());
+            welcomeToast(user);
         } catch (Exception e) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         }
-        welcomeToast(user);
         fragmentManager = getSupportFragmentManager();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -266,9 +266,6 @@ public class MainActivity extends AppCompatActivity
                 title = getResources().getString(R.string.news);
                 break;
             case R.id.nav_about:
-
-                new SendNotificationTask().execute("Entered About");
-
                 fragment = new AboutFragment();
                 title = getResources().getString(R.string.about);
                 break;
@@ -370,6 +367,11 @@ public class MainActivity extends AppCompatActivity
             new TwitterUpdateStatusTask().execute(twit);
         }
     }
+
+    public void notification(String message) {
+        new SendNotificationTask().execute(message);
+    }
+
 
     class SendNotificationTask extends AsyncTask<String, String, Boolean> {
 

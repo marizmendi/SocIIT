@@ -27,7 +27,7 @@ public class NotificationSendHelper {
     public void sendNotification(String message) {
 
         HashMap<String, String> map = new HashMap<String, String>();
-        map.put("dropdown", "default");
+        map.put("dropdown", "sociit");
         map.put("message", message);
 
         performPostCall("http://www.papademas.net/gcmsender/gcm_main.php", map);

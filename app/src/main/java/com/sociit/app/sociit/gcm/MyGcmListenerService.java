@@ -38,10 +38,8 @@ public class MyGcmListenerService extends GcmListenerService {
             if (data.get(not_type) != null) {
                 message = data.getString(not_type);
                 type = not_type;
-
             }
         }
-        Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
 
         sendNotification(message, type);
@@ -56,12 +54,8 @@ public class MyGcmListenerService extends GcmListenerService {
      */
     private void sendNotification(String message, String type) {
         Intent intent = new Intent(this, MainActivity.class);
-        if (type.equalsIgnoreCase("default")) {
-            //nothing will be changed.
-        } else if (type.equalsIgnoreCase("type1")) {
-            //define intent to do some other tasks than running the main activity
-        } else if (type.equalsIgnoreCase("type2")) {
-            //define intent to do some other tasks than running the main activity
+        if (!type.equalsIgnoreCase("sociit")) {
+            return;
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
