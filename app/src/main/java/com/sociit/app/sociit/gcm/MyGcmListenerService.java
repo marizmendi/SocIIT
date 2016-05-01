@@ -61,7 +61,6 @@ public class MyGcmListenerService extends GcmListenerService {
         } else if (type.equalsIgnoreCase("type1")) {
             //define intent to do some other tasks than running the main activity
         } else if (type.equalsIgnoreCase("type2")) {
-            Log.d("TYPE", "2");
             //define intent to do some other tasks than running the main activity
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
