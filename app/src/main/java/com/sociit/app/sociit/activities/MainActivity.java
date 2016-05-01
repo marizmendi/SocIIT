@@ -24,6 +24,8 @@ import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.model.Marker;
 import com.sociit.app.sociit.MyApplication;
 import com.sociit.app.sociit.R;
@@ -47,9 +49,6 @@ import com.sociit.app.sociit.helpers.SqlHelper;
 import com.sociit.app.sociit.helpers.StringUtil;
 import com.sociit.app.sociit.helpers.TwitterHelper;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Stack;
 
@@ -75,6 +74,8 @@ public class MainActivity extends AppCompatActivity
     public static FragmentManager fragmentManager;
     private static Session session;
 
+    private Tracker mTracker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +86,12 @@ public class MainActivity extends AppCompatActivity
         title = getString(R.string.app_name);
         titleHistory.push(title);
         db = new SqlHelper(getApplicationContext());
+        // [START shared_tracker]
+        // Obtain the shared Tracker instance.
+        mTracker = ((MyApplication) getApplication()).getDefaultTracker();
+        mTracker.send(new HitBuilders.ScreenViewBuilder()
+                .build());
+        // [END shared_tracker]
         try {
             session = ((MyApplication) getApplication()).getSession();
             user = db.getUserByUsername(session.getUser().getUsername());
@@ -245,6 +252,12 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_home:
                 fragment = new HomeFragment();
                 title = getResources().getString(R.string.home);
+                // [START custom_event]
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Home")
+                        .setAction("Action")
+                        .build());
+                // [END custom_event]
                 break;
             case R.id.nav_my_activities:
                 fragment = new ActivityFragment();
@@ -252,22 +265,52 @@ public class MainActivity extends AppCompatActivity
                 bundle.putInt("userId", this.user.getId());
                 fragment.setArguments(bundle);
                 title = getResources().getString(R.string.my_activities);
+                // [START custom_event]
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("My Activities")
+                        .setAction("Action")
+                        .build());
+                // [END custom_event]
                 break;
             case R.id.nav_buildings:
                 fragment = new BuildingFragment();
                 title = getResources().getString(R.string.buildings);
+                // [START custom_event]
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Buildings")
+                        .setAction("Action")
+                        .build());
+                // [END custom_event]
                 break;
             case R.id.nav_activities:
                 fragment = new ActivityFragment();
                 title = getResources().getString(R.string.activities);
+                // [START custom_event]
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Activities")
+                        .setAction("Action")
+                        .build());
+                // [END custom_event]
                 break;
             case R.id.nav_news:
                 fragment = new NewsFragment();
                 title = getResources().getString(R.string.news);
+                // [START custom_event]
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("News")
+                        .setAction("Action")
+                        .build());
+                // [END custom_event]
                 break;
             case R.id.nav_about:
                 fragment = new AboutFragment();
                 title = getResources().getString(R.string.about);
+                // [START custom_event]
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("About")
+                        .setAction("Action")
+                        .build());
+                // [END custom_event]
                 break;
         }
         if (fragment != null) {

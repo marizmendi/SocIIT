@@ -1,35 +1,32 @@
 {
   "project_info": {
-    "project_id": "gcm-demo-1218",
-    "project_number": "407386510400",
-    "name": "GCM-Demo"
+    "project_number": "921287206465",
+    "project_id": "sociit-6c56e"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:407386510400:android:1aff6927991bd858",
-        "client_id": "android:org.neurobin.aapps.gcmclient",
-        "client_type": 1,
+        "mobilesdk_app_id": "1:921287206465:android:7d0e317dacaebcd8",
         "android_client_info": {
-          "package_name": "org.neurobin.aapps.gcmclient"
+          "package_name": "com.sociit"
         }
       },
       "oauth_client": [],
-      "api_key": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH72beFKULQ72k9sZB9BPNDfQTU5bwEP0"
+        }
+      ],
       "services": {
         "analytics_service": {
-          "status": 1
-        },
-        "cloud_messaging_service": {
           "status": 2,
-          "apns_config": []
+          "analytics_property": {
+            "tracking_id": "UA-77173018-1"
+          }
         },
         "appinvite_service": {
           "status": 1,
           "other_platform_oauth_client": []
-        },
-        "google_signin_service": {
-          "status": 1
         },
         "ads_service": {
           "status": 1
@@ -38,38 +35,33 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:407386510400:android:226f6a1a88a40a3c",
-        "client_id": "android:com.sociit.app.sociit",
-        "client_type": 1,
+        "mobilesdk_app_id": "1:921287206465:android:1511bbff37e6d5ef",
         "android_client_info": {
           "package_name": "com.sociit.app.sociit"
         }
       },
       "oauth_client": [],
-      "api_key": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH72beFKULQ72k9sZB9BPNDfQTU5bwEP0"
+        }
+      ],
       "services": {
         "analytics_service": {
-          "status": 1
-        },
-        "cloud_messaging_service": {
           "status": 2,
-          "apns_config": []
+          "analytics_property": {
+            "tracking_id": "UA-77173018-2"
+          }
         },
         "appinvite_service": {
           "status": 1,
           "other_platform_oauth_client": []
         },
-        "google_signin_service": {
-          "status": 1
-        },
         "ads_service": {
-          "status": 2,
-          "test_banner_ad_unit_id": "ca-app-pub-3940256099942544/6300978111",
-          "test_interstitial_ad_unit_id": "ca-app-pub-3940256099942544/1033173712"
+          "status": 1
         }
       }
     }
   ],
-  "client_info": [],
-  "ARTIFACT_VERSION": "1"
+  "configuration_version": "1"
 }

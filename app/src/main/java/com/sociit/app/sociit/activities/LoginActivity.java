@@ -30,6 +30,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.sociit.app.sociit.MyApplication;
 import com.sociit.app.sociit.R;
 import com.sociit.app.sociit.entities.Session;
@@ -68,6 +70,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private boolean userNotFound = false;
     private String mUsername;
 
+    private Tracker mTracker;
+
     SqlHelper db;
 
     @Override
@@ -95,7 +99,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
-
+        mTracker = ((MyApplication) getApplication()).getDefaultTracker();
+        mTracker.send(new HitBuilders.ScreenViewBuilder()
+                .build());
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -383,6 +389,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
+                // [START custom_event]
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Login")
+                        .setAction("Login")
+                        .build());
+                // [END custom_event]
                 // Redirect to MainActivity
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra("mUsername", mUsername);

@@ -29,6 +29,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.sociit.app.sociit.MyApplication;
 import com.sociit.app.sociit.R;
 import com.sociit.app.sociit.entities.Session;
@@ -62,6 +64,8 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     private String mUsername;
     private String mName;
     SqlHelper db;
+    private Tracker mTracker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +77,16 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         populateAutoComplete();
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView2 = (EditText) findViewById(R.id.password2);
+        mTracker = ((MyApplication) getApplication()).getDefaultTracker();
+        mTracker.send(new HitBuilders.ScreenViewBuilder()
+                .build());
+        // [START custom_event]
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Login")
+                .setAction("Login")
+                .build());
+        // [END custom_event]
+        // Redirect to MainActivity
         mPasswordView2.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
