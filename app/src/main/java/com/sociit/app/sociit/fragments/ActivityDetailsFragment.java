@@ -135,7 +135,7 @@ public class ActivityDetailsFragment extends Fragment {
                     Toast.makeText(getContext(), "You have successfully joined the event", Toast.LENGTH_SHORT).show();
                     String message = "I've joined the activity " + activity.getName() + " at " + activity.getBuilding().getName();
                     ((MainActivity) getActivity()).twit(message);
-                    ((MainActivity) getActivity()).notification(message);
+                    ((MainActivity) getActivity()).notification(((MyApplication) getActivity().getApplication()).getSession().getUser().getUsername() + ": " + message);
 
                 } else Toast.makeText(getContext(), "You are already in this activity", Toast.LENGTH_SHORT).show();
 
