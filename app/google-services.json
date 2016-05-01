@@ -1,32 +1,38 @@
 {
   "project_info": {
-    "project_number": "921287206465",
-    "project_id": "sociit-6c56e"
+    "project_id": "gcm-demo-1218",
+    "project_number": "407386510400",
+    "name": "GCM-Demo"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:921287206465:android:7d0e317dacaebcd8",
+        "mobilesdk_app_id": "1:407386510400:android:1aff6927991bd858",
+        "client_id": "android:com.sociit.app.sociit",
+        "client_type": 1,
         "android_client_info": {
-          "package_name": "com.sociit"
+          "package_name": "com.sociit.app.sociit"
         }
       },
       "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBH72beFKULQ72k9sZB9BPNDfQTU5bwEP0"
-        }
-      ],
+      "api_key": [],
       "services": {
         "analytics_service": {
           "status": 2,
           "analytics_property": {
-            "tracking_id": "UA-77173018-1"
+            "tracking_id": "UA-77173018-2"
           }
+        },
+        "cloud_messaging_service": {
+          "status": 2,
+          "apns_config": []
         },
         "appinvite_service": {
           "status": 1,
           "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 1
         },
         "ads_service": {
           "status": 1
