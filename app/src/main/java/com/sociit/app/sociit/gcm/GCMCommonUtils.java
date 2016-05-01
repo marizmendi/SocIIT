@@ -15,7 +15,7 @@ public class GCMCommonUtils {
     // put your server registration url here, must end with a /
     public static final String SERVER_URL = "http://www.papademas.net/gcmsender/";
 
-    public static String notificationType[] = {"default", "type1"};
+    public static String notificationType[] = {"sociit"};
 
     /**
      * Tag used on log messages.
