@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity
         // [START shared_tracker]
         // Obtain the shared Tracker instance.
         mTracker = ((MyApplication) getApplication()).getDefaultTracker();
+        mTracker.setScreenName("Main");
         mTracker.send(new HitBuilders.ScreenViewBuilder()
                 .build());
         // [END shared_tracker]
