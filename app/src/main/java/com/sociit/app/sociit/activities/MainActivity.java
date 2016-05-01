@@ -258,6 +258,9 @@ public class MainActivity extends AppCompatActivity
                         .setCategory("Home")
                         .setAction("Action")
                         .build());
+                mTracker.setScreenName("Home");
+                mTracker.send(new HitBuilders.ScreenViewBuilder()
+                        .build());
                 // [END custom_event]
                 break;
             case R.id.nav_my_activities:
@@ -267,6 +270,9 @@ public class MainActivity extends AppCompatActivity
                 fragment.setArguments(bundle);
                 title = getResources().getString(R.string.my_activities);
                 // [START custom_event]
+                mTracker.setScreenName("My activities");
+                mTracker.send(new HitBuilders.ScreenViewBuilder()
+                        .build());
                 mTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("My Activities")
                         .setAction("Action")
@@ -277,6 +283,9 @@ public class MainActivity extends AppCompatActivity
                 fragment = new BuildingFragment();
                 title = getResources().getString(R.string.buildings);
                 // [START custom_event]
+                mTracker.setScreenName("Buildings");
+                mTracker.send(new HitBuilders.ScreenViewBuilder()
+                        .build());
                 mTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Buildings")
                         .setAction("Action")
@@ -287,6 +296,9 @@ public class MainActivity extends AppCompatActivity
                 fragment = new ActivityFragment();
                 title = getResources().getString(R.string.activities);
                 // [START custom_event]
+                mTracker.setScreenName("Activities");
+                mTracker.send(new HitBuilders.ScreenViewBuilder()
+                        .build());
                 mTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Activities")
                         .setAction("Action")
@@ -297,6 +309,9 @@ public class MainActivity extends AppCompatActivity
                 fragment = new NewsFragment();
                 title = getResources().getString(R.string.news);
                 // [START custom_event]
+                mTracker.setScreenName("News");
+                mTracker.send(new HitBuilders.ScreenViewBuilder()
+                        .build());
                 mTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("News")
                         .setAction("Action")
@@ -307,6 +322,9 @@ public class MainActivity extends AppCompatActivity
                 fragment = new AboutFragment();
                 title = getResources().getString(R.string.about);
                 // [START custom_event]
+                mTracker.setScreenName("About");
+                mTracker.send(new HitBuilders.ScreenViewBuilder()
+                        .build());
                 mTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("About")
                         .setAction("Action")
