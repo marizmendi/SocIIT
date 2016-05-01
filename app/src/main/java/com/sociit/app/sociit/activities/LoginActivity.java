@@ -100,6 +100,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
         mTracker = ((MyApplication) getApplication()).getDefaultTracker();
+        mTracker.setScreenName("Login");
         mTracker.send(new HitBuilders.ScreenViewBuilder()
                 .build());
         mPasswordView = (EditText) findViewById(R.id.password);

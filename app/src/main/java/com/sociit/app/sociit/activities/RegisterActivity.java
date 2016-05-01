@@ -78,6 +78,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView2 = (EditText) findViewById(R.id.password2);
         mTracker = ((MyApplication) getApplication()).getDefaultTracker();
+        mTracker.setScreenName("Register");
         mTracker.send(new HitBuilders.ScreenViewBuilder()
                 .build());
         // [START custom_event]
