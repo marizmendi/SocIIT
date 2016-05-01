@@ -163,7 +163,7 @@ public class AddActivityFragment extends DialogFragment {
                     db.addActivity(activity);
                     String message = "Check out my new activity " + activity.getName() + " at " + activity.getBuilding().getName();
                     ((MainActivity) getActivity()).twit(message);
-                    ((MainActivity) getActivity()).notification(message);
+                    ((MainActivity) getActivity()).notification(((MyApplication) getActivity().getApplication()).getSession().getUser().getUsername() +": " + message);
                     mListener.onFragmentInteraction(user.getId());
                 }
             }

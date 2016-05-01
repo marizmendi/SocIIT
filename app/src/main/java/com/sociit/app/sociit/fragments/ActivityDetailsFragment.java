@@ -88,7 +88,7 @@ public class ActivityDetailsFragment extends Fragment {
         TextView activityIdDescription = (TextView) v.findViewById(R.id.activityIdDescription);
         TextView activityIdDateAndTime = (TextView) v.findViewById(R.id.activityIdDateAndTime);
         TextView activityIdPlace = (TextView) v.findViewById(R.id.activityIdPlace);
-        TextView activityIdPeople = (TextView) v.findViewById(R.id.activityIdPeople);
+        final TextView activityIdPeople = (TextView) v.findViewById(R.id.activityIdPeople);
         Button joinButton = (Button) v.findViewById(R.id.joinButton);
         final Button leaveButton = (Button) v.findViewById(R.id.leaveButton);
         leaveButton.setVisibility(View.INVISIBLE);
@@ -132,10 +132,12 @@ public class ActivityDetailsFragment extends Fragment {
                 if (!userExists) {
                     db.linkUserActivity(user, activity);
                     leaveButton.setVisibility(View.VISIBLE);
+                    int numPeople = Integer.parseInt(activityIdPeople.getText().toString())+1;
+                    activityIdPeople.setText(numPeople+"");
                     Toast.makeText(getContext(), "You have successfully joined the event", Toast.LENGTH_SHORT).show();
                     String message = "I've joined the activity " + activity.getName() + " at " + activity.getBuilding().getName();
                     ((MainActivity) getActivity()).twit(message);
-                    ((MainActivity) getActivity()).notification(message);
+                    ((MainActivity) getActivity()).notification(((MyApplication) getActivity().getApplication()).getSession().getUser().getUsername() + ": " + message);
 
                 } else Toast.makeText(getContext(), "You are already in this activity", Toast.LENGTH_SHORT).show();
 
@@ -155,6 +157,8 @@ public class ActivityDetailsFragment extends Fragment {
                 db.leaveActivity(user.getId(), activityId);
                 userExists = false;
                 leaveButton.setVisibility(View.INVISIBLE);
+                int numPeople = Integer.parseInt(activityIdPeople.getText().toString())-1;
+                activityIdPeople.setText(numPeople+"");
             }
         });
     }
