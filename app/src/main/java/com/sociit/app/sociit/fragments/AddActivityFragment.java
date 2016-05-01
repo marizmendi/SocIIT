@@ -161,7 +161,9 @@ public class AddActivityFragment extends DialogFragment {
                     Activity activity = new Activity(0, activityName.getText().toString(), db.getBuildingByName(buildingId), datePickerDate, userList, null, activityDescription.getText().toString());
                     //activity added to the database
                     db.addActivity(activity);
-                    ((MainActivity) getActivity()).twit("Check out my new activity " + activity.getName() + " at " + activity.getBuilding().getName());
+                    String message = "Check out my new activity " + activity.getName() + " at " + activity.getBuilding().getName();
+                    ((MainActivity) getActivity()).twit(message);
+                    ((MainActivity) getActivity()).notification(message);
                     mListener.onFragmentInteraction(user.getId());
                 }
             }

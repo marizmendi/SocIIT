@@ -266,9 +266,6 @@ public class MainActivity extends AppCompatActivity
                 title = getResources().getString(R.string.news);
                 break;
             case R.id.nav_about:
-
-                new SendNotificationTask().execute("Entered About");
-
                 fragment = new AboutFragment();
                 title = getResources().getString(R.string.about);
                 break;
@@ -370,6 +367,11 @@ public class MainActivity extends AppCompatActivity
             new TwitterUpdateStatusTask().execute(twit);
         }
     }
+
+    public void notification(String message) {
+        new SendNotificationTask().execute("Entered About");
+    }
+
 
     class SendNotificationTask extends AsyncTask<String, String, Boolean> {
 
