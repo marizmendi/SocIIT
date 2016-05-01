@@ -42,6 +42,7 @@ import com.sociit.app.sociit.fragments.SettingsFragment;
 import com.sociit.app.sociit.gcm.GCMCommonUtils;
 import com.sociit.app.sociit.gcm.MyGCMRegistrationIntentService;
 import com.sociit.app.sociit.helpers.ConstantValues;
+import com.sociit.app.sociit.helpers.NotificationSendHelper;
 import com.sociit.app.sociit.helpers.SqlHelper;
 import com.sociit.app.sociit.helpers.StringUtil;
 import com.sociit.app.sociit.helpers.TwitterHelper;
@@ -265,6 +266,9 @@ public class MainActivity extends AppCompatActivity
                 title = getResources().getString(R.string.news);
                 break;
             case R.id.nav_about:
+
+                new SendNotificationTask().execute("Entered About");
+
                 fragment = new AboutFragment();
                 title = getResources().getString(R.string.about);
                 break;
@@ -367,14 +371,22 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    class SendNotificationTask extends AsyncTask<String, String, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            NotificationSendHelper nsh = new NotificationSendHelper();
+            nsh.sendNotification(params[0]);
+            return true;
+        }
+    }
+
     class TwitterUpdateStatusTask extends AsyncTask<String, String, Boolean> {
 
         @Override
         protected void onPostExecute(Boolean result) {
             if (result)
                 Toast.makeText(getApplicationContext(), "Tweet successfully", Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(getApplicationContext(), "Tweet failed", Toast.LENGTH_SHORT).show();
         }
 
         @Override
