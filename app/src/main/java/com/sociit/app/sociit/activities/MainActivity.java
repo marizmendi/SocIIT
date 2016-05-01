@@ -88,12 +88,12 @@ public class MainActivity extends AppCompatActivity
         try {
             session = ((MyApplication) getApplication()).getSession();
             user = db.getUserByUsername(session.getUser().getUsername());
+            welcomeToast(user);
         } catch (Exception e) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         }
-        welcomeToast(user);
         fragmentManager = getSupportFragmentManager();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -369,7 +369,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void notification(String message) {
-        new SendNotificationTask().execute("Entered About");
+        new SendNotificationTask().execute(message);
     }
 
 
